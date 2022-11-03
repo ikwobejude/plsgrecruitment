@@ -1,0 +1,226 @@
+<%- include('../layouts/header') %>
+<%- include('../layouts/nav') %>
+
+ <!-- Hero Slider -->
+
+<section class="hero bg-cover bg-position py-4" style="background: url(/a/img/hero-banner-3.jpg)">
+    <div class="container py-5 index-forward text-white">
+      <h3>Generate Invoice</h3>
+      <!-- Breadcrumb-->
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-none mb-0 p-0">
+          <li class="breadcrumb-item pl-0"><a href="index.html"> <i class="fas fa-home mr-2"></i>Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Select Identity</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+  
+  <section class="py-5 bg-light">
+    <%- messages('messages', locals) %>   
+    <div class="container py-5">
+      <div class="row align-items-center">
+  
+        <div class="col-lg-5 px-lg-0">
+          <div class="p-4 p-md-5 shadow bg-white">
+            <header>
+              <h4>Kindly fill the following <span class="text-primary">details </span>to proceed </h4>
+              <p class=" text-muted">Enter Taxpayer Tin</p>
+            </header>
+            <div class="row">
+              <div class="col-lg-12">
+                <form class="form-contact contact_form" action="" method="get" id="contactForm" novalidate="novalidate">
+  
+                  <div class="mb-4">
+                    <input type="" class="form-control" name="tin" placeholder="ENTER TIN" require id="myInput" />
+                  </div>
+  
+                  <div class="form-group" style="text-align: right;">
+                    <button class="btn btn-outline-primary" style="width: 100%;" type="submit">VERIFY TIN</button>
+                  </div>
+                </form>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <% if(tin_number) {%>
+  
+  
+  
+  
+  
+        <div class="col-lg-7 px-lg-0">
+          <div class="p-4 p-md-5 shadow ">
+              UNIQUE TIN FOUND FOR  <strong><%= tin_number.taxpayer_name %></strong> 
+            <!-- <form class="form-contact" action='/generate_ass_invoice' method="POST"> -->
+            <form method="post" role="form" id="addroadtrys" name="addroadtrys" action="{{url('store_generated_invoice')}}">
+             
+              <table class="table " id="sample_editable_1">
+                <thead>
+                  <tr>
+                    <th>Payment Item(s)</th>
+                    <th>Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="itemRows">
+                    <td>
+                      <select class="form-control " name="assessment_item_name[]" data-value="" id="assessment_item_name" required>
+                        <option value="">-- Select Option --</option>
+                        <% items.forEach(function(item_name) { %>
+                        <option value="<%= item_name.assessment_item_id %>"><%= item_name.assessment_item_name %></option>
+                        <% }); %>
+                      </select>
+                    </td>
+                    </select>
+                    </td>
+  
+                    <td>
+                      <a href="javascript:;" class="btn blue btn-success add-row"> <i class="fa fa-plus"></i></a>
+                      <!-- <a href="javascript:;" class="btn btn-danger" onclick="deleteRow(this)"><i class='fa fa-trash'></i></a> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <input type="hidden" name="tin_numb" value="<%= tin_number->taxpayer_rin }}">
+              <input type="hidden" name="invoice_number" value="<?php echo rand() . DATE("dmyHis") ?>">
+              <button type="submit" name="submitmany" value="submits" class="btn btn-primary" id="submitBtn">Submit</button>
+  
+  
+            </form>
+            
+            
+  
+            <% if( itno > "0"){ %>
+  
+            <form method="post" role="form" id="addroadtrys" name="addroadtrys" action="store_generated_invoice">
+              
+              <input type="hidden" name="taxpayer_name" value="<%= tin_number.taxpayer_name %>" />
+              <input type="hidden" name="tax_payer_type" value="<%= tin_number.tax_payer_type %>" /> 
+              <table id="example233" class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Vehicle items</th>
+  
+                    <th>Amount</th>
+                    <th>Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <%
+  
+                  let i = 0;
+                  let total = 0;
+
+                  row.forEach(function(invoice) {
+                    total += invoice.assessment_item_amount;
+                    %>
+                  <tr>
+                    <td><%= invoice.assessment_item_names %></td>
+  
+  
+                    <td><%= invoice.assessment_item_amount %></td>
+  
+                    <td>
+                        <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                          <input type="checkbox" class="checkboxes" name="id_assessment_item_invoices[]" value="<%= invoice.id_assessment_item_invoices %>" />
+                          <span></span>
+                        </label>
+                    </td>
+                  </tr>
+                 
+  
+                  <%});%>
+  
+                  <tr>
+                  <tr>
+  
+                    <td><strong>Total</strong></td>
+  
+                    <td><strong>&#8358;<%= total %></strong></td>
+  
+                  </tr>
+  
+                  
+  
+  
+                  <td colspan="2"> <button type="submit" name="submitmany" onclick="return confirm('Are you sure you want to finalize this Transaction?');" value="update" class="btn btn-primary">Finish Transaction</button>
+  
+                  </td>
+                  <td><button type="submit" name="submitmany" value="cancel" class="btn btn-default">Cancel/Remove</button></td>
+  
+  
+  
+                  </tr>
+                </tbody>
+              </table>
+              <%}%>
+          </div>
+        </div>
+  
+        <%} else {%>
+          
+        <%}%>
+      </div>
+    </div>
+  </section>
+  
+<%- include('../layouts/footer') %>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      $(".add-row").click(function() {
+  
+        let rows = +($('table tbody tr.itemRows').length) + Math.floor(1000 + Math.random() * 9000);
+        var markup = "<tr class='itemRows' row='" + rows + "'><td><div class='input-group'><select class='form-control' name='assessment_item_name[]' data-value='' id='assessment_item_name' " + rows + "' row='" + rows + "' required><option value=''>-- Select Option --</option><% items.forEach(function(item_name) { %><option value='<%= item_name.assessment_item_id %>''><%= item_name.assessment_item_name %></option><% }); %></select> </div></td><td><a href='javascript:;' class='btn btn-danger'  onclick='deleteRow(this)'><i class='fa fa-trash'></i></a></td></tr>";
+        $("#sample_editable_1 tbody").append(markup);
+            getSelectedValue();
+        });
+    });
+  
+    function deleteRow(r) {
+  
+      let rowlength = document.getElementsByClassName("itemRows").length;
+      if (rowlength > 1) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("sample_editable_1").deleteRow(i);
+      }
+  
+    }
+  
+  
+    function ShowHideDiv() {
+      var chkYes = document.getElementById("chkYes");
+      var chkYes1 = document.getElementById("chkYes1");
+      var dvPassport = document.getElementById("dvPassport");
+      dvPassport.style.display = chkYes.checked || chkYes1.checked ? "block" : "none";
+    }
+  </script>
+  <script>
+    var typingTimer; //timer identifier
+    var doneTypingInterval = 5000; //time in ms (5 seconds)
+  
+    //on keyup, start the countdown
+    $('#myInput').keyup(function() {
+      clearTimeout(typingTimer);
+      if ($('#myInput').val()) {
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+      }
+    });
+  
+    //user is "finished typing," do something
+    function doneTyping() {
+  
+      alert('Hello ', $('#myInput').val())
+      //do something
+      // $.ajax({
+      //   url: 'get_valid_tax_payer_tin',
+      //   method: "GET",
+      //   success: function(response) {
+  
+      //   }
+      // })
+    }
+  </script>

@@ -1,0 +1,51 @@
+<%- include('../layouts/header') %>
+<%- include('../layouts/nav') %>
+<fieldset>
+    <h1>LOGIN <%= user %></h1>
+    <form action="" method="post">
+        <div class="error"></div>
+        <div class="fm">
+        Username: <input type="email" name="username"> <br><br>
+        Password: <input type="password" name="password"> <br> <br>
+        <button type="submit">Login</button>
+    </form>
+</fieldset>
+
+
+
+
+
+
+
+<script>
+    let form = document.querySelector('form')
+    const formerror = document.querySelector('.error');
+    form.addEventListener('submit', async(e) => {
+        e.preventDefault();
+        formerror.textContent = '';
+
+
+        const username = form.username.value;
+        const password = form.password.value;
+
+        console.log(username, password)
+
+        try {
+            let res = await fetch('/login', {
+                method: "POST",
+                body: JSON.stringify({username: username, password:password}),
+                headers: {'Content-Type': 'application/json'}
+            })
+
+            const data = await res.json(); 
+            if(data.err) {
+                formerror.textContent = data.err
+            } else {
+                location.assign('/admin/dashboard')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    })
+</script>
+<%- include('../layouts/footer') %>

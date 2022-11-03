@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    font-family: Raleway;
+    padding: 30px;
+    width: 70%;
+    min-width: 300px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+  }
+
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  button {
+    background-color: #04AA6D;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  #prevBtn {
+    background-color: #bbbbbb;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #04AA6D;
+  }
+
+   /* spinner */
+   #cover-spin {
+        position:fixed;
+        width:100%;
+        left:0;right:0;top:0;bottom:0;
+        background-color: rgba(255,255,255,0.7);
+        z-index:9999;
+        display:none;
+    }
+    @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #cover-spin::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 48%;
+      top: 40%;
+      width: 40px;
+      height: 40px;
+      border-style: solid;
+      border-color: black;
+      border-top-color: transparent;
+      border-width: 4px;
+      border-radius: 50%;
+      -webkit-animation: spin .8s linear infinite;
+      animation: spin .8s linear infinite;
+    }
+</style>
+
+<body>
+  <div id="cover-spin"></div>
+  <form id="regForm" action="/application" method="post">
+    <h1>APPLICATION FORM</h1>
+    <!-- One "tab" for each step in the form: -->
+    
+      <h2>Personal Bio-data</h2>
+      <div class="row">
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Full current name <span style="color: red;">*</span> </label>
+            <input type="text" name="applicant_fullname" value="<%= application? application.applicant_fullname : name %>" class="form-control" id="formGroupExampleInput" required placeholder="">
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Names by which otherwise known. If different from (a) </label>
+            <input type="text" name="other_names" class="form-control" value="<%= application? application.other_names : '' %>" id="formGroupExampleInput" placeholder="">
+            <input type="hidden" name="applicant_id" value="<%= id %>"/>
+            <input type="hidden" name="email" value="<%= email %>"/>
+            <input type="hidden" name="phone" value="<%= phone %>"/>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Post(s) or which applying in order of preference (first) <span style="color: red;">*</span></label>
+            <select name="job_category1" class="form-control" id="" required >
+              <option value="">SELECT </option>
+              <% job_cate.forEach(function(cat){%>
+                <option value="<%= cat.code %>" <%= application? application.job_position == cat.code?'selected' : ''  : '' %>><%= cat.name %></option>
+              <%});%>
+            </select>
+          </div>
+
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput"> (Second) </label>
+            <select name="job_category2" class="form-control" id="">
+              <option value="">SELECT POST</option>
+              <% job_cate.forEach(function(cat){%>
+                <option value="<%= cat.code %>" <%= application? application.job_position2 == cat.code?'selected' : ''  : '' %>><%= cat.name %> </option>
+              <%});%>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Date available for employment <span style="color: red;">*</span></label>
+            <input type="date" name="date_available_for_employment" value="<%= application? application.date_available_for_employment : '' %>" class="form-control" id="formGroupExampleInput" required>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Highest education/ technical certificate obtained <span style="color: red;">*</span></label>
+            <input type="text" name="highest_education" class="form-control" value="<%= application? application.highest_education : '' %>" id="formGroupExampleInput" required>
+          </div>
+        </div>
+      </div> 
+      <!-- <p>
+        Present employer’s name, nature of employment, salary (give details of terms of present employment.
+        i.e. whether contract, temporary, pensionable or bonded, and whether employed is agreeable to release):
+      </p>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Present Employment details</label>
+            <textarea type="text" name="present_employment_detail"  class="form-control" id="formGroupExampleInput"
+              placeholder=""> <%= application? application.present_employment_detail : '' %></textarea>
+          </div>
+        </div>
+
+      </div> -->
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Address for correspondence</label>
+            <textarea type="text" name="address_of_correspondence" class="form-control" id="formGroupExampleInput"
+              placeholder="" required>  <%= application? application.address_of_correspondence : '' %></textarea>
+          </div>
+        </div>
+        <div class="col-md-8 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Last place of resident outside Nigeria (to be NON Nigerians or who have
+              been outside Nigeria) </label>
+            <input type="text" name="last_place_of_residence_outside_nigeria" value="<%= application? application.last_place_of_residence_outside_nigeria : '' %>" class="form-control"
+              id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Age last birthday</label>
+            <input type="text" name="age_last_birthday" class="form-control" value="<%= application? application.age_last_birthday : '' %>" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Date of birth </label>
+            <input type="<%= application? '' : 'date' %>" name="dob" class="form-control" id="formGroupExampleInput" value="<%= application? application.dob : '' %>" placeholder="">
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Name and race/ ethnicity of father<span style="color: red;">*</span> </label>
+            <input type="text" name="name_race_ethnicity_of_father" class="form-control" value="<%= application? application.name_race_ethnicity_of_father : '' %>" id="formGroupExampleInput"
+              required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Father’s present or last occupation<span style="color: red;">*</span></label>
+            <input type="text" name="fathers_present_occupation" class="form-control" value="<%= application? application.fathers_present_occupation : '' %>" id="formGroupExampleInput"
+              required>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Father’s present address</label>
+            <input type="text" name="fathers_present_address" class="form-control" value="<%= application? application.fathers_present_address : '' %>" id="formGroupExampleInput"
+              placeholder="">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Name and race/ ethnicity of mother<span style="color: red;">*</span> </label>
+            <input type="text" name="name_race_ethnicity_of_mother" value="<%= application? application.name_race_ethnicity_of_mother : '' %>" class="form-control" id="formGroupExampleInput"
+              required>
+              <input type="hidden" name="org_id" value="<%= org %>" />
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div style="overflow:auto;">
+      <div style="float:right;">
+        <!-- <button type="button" id="prevBtn" >Previous</button> -->
+        <button type="submit" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </form>
+
+ 
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script src="/notify.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+ <script>
+  let piid = '<%= piid %>';
+  let orgid = '<%= org %>';
+  let form = document.querySelector('#regForm');
+  form.addEventListener('submit', async(e)=> {
+    e.preventDefault();
+    $('#cover-spin').show(0)
+    let date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let MIL = date.getMilliseconds();
+    let SEC = date.getSeconds();
+    let aplname = form.applicant_fullname.value;
+      var matches = aplname.match(/\b(\w)/g); //['j', 's', 'o', 'n']
+      var acronym = matches.join(""); //json
+      var acronyml = acronym.toUpperCase();
+    let proccessid = `REC/PLT/${acronyml}/${month}/${year}/${orgid}/${MIL}${SEC}`
+
+
+  let pyl = {
+    applicant_fullname : form.applicant_fullname.value,
+    other_names : form.other_names.value,
+    job_position : form.job_category1.value,
+    job_position2 : form.job_category2.value,
+    date_available_for_employment : form.date_available_for_employment.value,
+    highest_education : form.highest_education.value,
+    // present_employment_detail : form.present_employment_detail.value,
+    address_of_correspondence : form.address_of_correspondence.value,
+    last_place_of_residence_outside_nigeria : form.last_place_of_residence_outside_nigeria.value,
+    age_last_birthday : form.age_last_birthday.value,
+    dob : form.dob.value,
+    name_race_ethnicity_of_father : form.name_race_ethnicity_of_father.value,
+    fathers_present_occupation : form.fathers_present_occupation.value,
+    fathers_present_address : form.fathers_present_address.value,
+    name_race_ethnicity_of_mother : form.name_race_ethnicity_of_mother.value,
+    process_number: proccessid,
+    applicant_id : form.applicant_id.value,
+    org_id : form.org_id.value,
+    email : form.email.value,
+    phone : form.phone.value,
+  }
+    //  console.log(pyl)
+     try {
+         const res = await fetch('/application?piid='+piid, {
+             method: "POST",
+             body: JSON.stringify(pyl),
+             headers: {'Content-Type': 'application/json'}
+         });
+
+         const data = await res.json();
+         console.log(data)
+
+         if (data.err) {
+          $('#cover-spin').hide(0)
+            if(data.err == "Validation error"){
+                Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: "APPLICATION ALREADY EXIST, KINDLY USE THE RETURNING APPLICANT LINK ON THE HOME PAGE, USE YOU PHONE NUMBER TO RETURN TO WHERE YOU LEFT THE FORM",
+             })
+            } else {
+                Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: data.err,
+             })
+            }
+             
+
+
+         } else {
+          $('#cover-spin').hide(0)
+             let p = data.data
+           Swal.fire({
+             position: 'top-end',
+             icon: 'success',
+             title: 'Successfull',
+             showConfirmButton: false,
+             timer: 1500
+           })
+           .then(() => {
+             location.assign(`/application_1_1?piid=`+p)
+           })
+           
+         }
+     } catch (error) {
+      $('#cover-spin').hide(0)
+       Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: error.message ,
+               // footer: '<a href="">Why do I have this issue?</a>'
+             })
+     }
+  })
+ </script>
+
+</body>
+
+</html>

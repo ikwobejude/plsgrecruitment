@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    font-family: Raleway;
+    padding: 40px;
+    width: 70%;
+    min-width: 300px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+  }
+
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  button {
+    background-color: #04AA6D;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  #prevBtn {
+    background-color: #bbbbbb;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #04AA6D;
+  }
+   /* spinner */
+   #cover-spin {
+        position:fixed;
+        width:100%;
+        left:0;right:0;top:0;bottom:0;
+        background-color: rgba(255,255,255,0.7);
+        z-index:9999;
+        display:none;
+    }
+    @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #cover-spin::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 48%;
+      top: 40%;
+      width: 40px;
+      height: 40px;
+      border-style: solid;
+      border-color: black;
+      border-top-color: transparent;
+      border-width: 4px;
+      border-radius: 50%;
+      -webkit-animation: spin .8s linear infinite;
+      animation: spin .8s linear infinite;
+    }
+</style>
+
+<body>
+  <div id="cover-spin"></div>
+
+  <form id="regForm">
+    <h1>APPLICATION FORM</h1>
+      <h2>PART 1 CONTINUATION </h2>
+
+      <label for="formGroupExampleInput">Details of applicant’s place of birth <span style="color: red;">*</span> </label>
+      <div class="row">
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="applicant_country" id="country" class="form-control" onchange="getCountry()">
+              <option value="">SELECT COUNTRY</option>
+              <% countries.forEach((country) => { %>
+                <option value="<%= country.country_id %>" <%= country.country_id == 1 ? 'selected' : '' %>><%= country.country %></option>
+                <%})%>
+            </select>
+            <!-- <input type="text" name="applicant_country" value="<%= application? application.applicant_country : '' %>"  class="form-control" placeholder="Country" required> -->
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="state_of_origin" class="form-control bd" id="state" onchange="getState()" required>
+              <option disabled selected value>SELECT STATE </option>
+              <% if(application.state_of_origin) { %>
+                <% states.forEach((state) => { %>
+                  <option value="<%= state.state_id %>" <%= state.state_id == application.state_of_origin ? 'selected' : '' %> ><%= state.state %></option>
+                <%})%>
+              <%} else {%>
+               <% states.forEach((state) => { %>
+                  <option value="<%= state.state_id %>" <%= state.state_id == 32 ? 'selected': '' %>><%= state.state %></option>
+                <%})%>
+              <%}%>
+            </select>
+            <!-- <input type="text" name="state_of_origin" value="<%= application? application.state_of_origin : '' %>"  class="form-control" placeholder="State Of Oring" required> -->
+          </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="applicant_local_govt" class="form-control bd" id="lga_id" onchange="getLGA()" required>
+              <option disabled selected value>SELECT LGA </option>
+              <% if(application.applicant_local_govt) { %>
+                <% lgas.forEach((lga) => { %>
+                  <option value="<%= lga.lga_id %>" <%= lga.lga_id == application.state_of_origin ? 'selected' : '' %> ><%= lga.lga %></option>
+                <%})%>
+              <%} else {%>
+              <% lgas.forEach((lga) => { %>
+                 <% if(lga.state_id == 32) { %>
+                  <option value="<%= lga.lga_id %>"   ><%= lga.lga %></option>
+                 <%}%>
+                <%})%>
+              
+              <%}%>
+            </select>
+            <!-- <input type="text" name="applicant_local_govt" value="<%= application? application.applicant_local_govt : '' %>"  class="form-control" placeholder="local govt" required> -->
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input type="text" name="applicant_town_of_birt" class="form-control" value="<%= application? application.applicant_town_of_birt : '' %>" placeholder="Town or village">
+            <input type="hidden" name="proccess_id" value="<%= process_id %>" required>
+          </div>
+        </div>
+      </div>
+      <p>passport no. place and state of issue (Non Nigerians and Nigerians to whom passports have been issued must
+        complete)</p>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput"> Passport No.</label>
+            <input type="text" name="passport_no" class="form-control" value="<%= application? application.passport_no : '' %>"  id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Place & State of issue </label>
+            <input type="text" name="place_state_of_issue" value="<%= application? application.place_state_of_issue : '' %>"  class="form-control" id="formGroupExampleInput"
+              placeholder="">
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Gender <span style="color: red;">*</span></label>
+            <select name="gender" id="gender" class="form-control" required>
+              <option value="">SELECT GENDER </option>
+              <% genders.forEach((gender) => { %>
+                  <option value="<%= gender.gender %>" <%= application.gender == gender.gender? 'selected': '' %> ><%= gender.gender %></option>
+              <%})%>
+            </select>
+            <!-- <input type="text" name="gender" class="form-control" id="formGroupExampleInput" value="<%= application? application.gender : '' %>"  placeholder="" required> -->
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Marital Status <span style="color: red;">*</span> </label>
+            <select name="marital_status" class="form-control" id="">
+              <option value="">SELECT OPTION</option>
+              <% maritals.forEach((marital) => { %>
+                <option value="<%= marital.marital_status %>" <%= application.marital_status == marital.marital_status? 'selected': '' %>><%= marital.marital_status %></option>
+              <%})%>
+            </select>
+            
+            <!-- <input type="text" name="marital_status" class="form-control" id="formGroupExampleInput" value="<%= application? application.marital_status : '' %>"  required> -->
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">number of dependent children</label>
+            <input type="text" name="number_of_dependent_children" class="form-control" value="<%= application? application.number_of_dependent_children : '' %>"  required>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Nationality/race/ethnicity of applicant <span style="color: red;">*</span></label>
+            <!-- <input type="text" name="nationality_race_ethnicity_of_applicant" value="<%= application? application.nationality_race_ethnicity_of_applicant : '' %>"  class="form-control"
+              id="formGroupExampleInput" placeholder="" required> -->
+              <select name="nationality_race_ethnicity_of_applicant" id="nationality_race_ethnicity_of_applicant" class="form-control" required>
+                <option value="">SELECT COUNTRY</option>
+                <% countries.forEach((country) => { %>
+                  <option value="<%= country.country %>" <%= application.nationality_race_ethnicity_of_applicant == country.country? 'selected' : '' %>><%= country.country %></option>
+                  <%})%>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Religion of applicant </label>
+            <!-- <input type="text" name="applicant_reliegion" class="form-control" value="<%= application? application.applicant_reliegion : '' %>"  id="formGroupExampleInput" placeholder=""> -->
+              <select name="applicant_reliegion" class="form-control" id="applicant_reliegion">
+                <option value="">SELECT OPTION</option>
+                <% religs.forEach((relig) => { %>
+                  <option value="<%= relig.religion %>" <%= application.applicant_reliegion == relig.religion? 'selected': '' %>><%= relig.religion %></option>
+                <%})%>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Physical fitness (any defects to be stated </label>
+            <input type="text" name="physical_fitness" class="form-control" value="<%= application? application.physical_fitness : '' %>"  id="physical_fitness" placeholder="">
+          </div>
+        </div>
+
+      </div>
+     
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Details of countries visited other than country of birth, giving dates of
+              visit(s) and reason</label>
+            <textarea type="text" name="details_of_countries_visited"  class="form-control" id="formGroupExampleInput"
+              placeholder=""> <%= application? application.details_of_countries_visited : '' %></textarea>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Language understood well(English to be included, if well understood <span style="color: red;">*</span>
+            </label>
+            <input type="text" name="language" class="form-control" id="formGroupExampleInput" value="<%= application? application.language : '' %>" required>
+          </div>
+        </div>
+      </div>
+    <div style="overflow:auto;">
+      <div style="float:right;">
+        <a href="/application?piid=<%= process_id %>" class="btn btn-primary" id="" >Previous</a>
+        <button type="submit" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </form>
+
+ 
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script src="/notify.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+     var i = 1;
+     
+
+     $('#add_academi').on('click', function(){
+      console.log(i)
+       var markup = `
+       <div class="row" id="row${i}">
+        <div class="col-4">
+          <div class="form-group">
+            <label for="formGroupExampleInput">School</label>
+            <input type="text" name="school_name[]" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Location </label>
+            <input type="text" name="area[]" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Month </label>
+            <input type="text" name="moth[]" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Year </label>
+            <input type="text" name="year[]" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col-1">
+          <div class="form-group" style="padding-top: 27px;">
+            <a href="javascript:;" class="btn btn-success" onclick='deleteEdurow(${i})'>-</a>
+          </div>
+        </div>
+      </div>`;
+
+       $("#addedurow").append(markup);
+       i++
+     })
+
+     function deleteEdurow(h){
+      //  let id = $('#add-rw').val()
+       console.log(h)
+       $(`#row${h}`).remove()
+     }
+
+
+     
+
+     $('#add_empl').on('click', function(){
+      console.log(i)
+       var markupI = `
+       <div class="row" id="rowe${i}">
+        <div class="col">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Names of employers</label>
+              <input type="text" name="name_of_prev_employee" class="form-control" id="formGroupExampleInput"
+                placeholder="">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Nature of employment </label>
+              <input type="text" name="nature_of_prev_employment" class="form-control" id="formGroupExampleInput"
+                placeholder="">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Salary </label>
+              <input type="text" name="salary_of_prev_employment" class="form-control" id="formGroupExampleInput"
+                placeholder="">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="formGroupExampleInput">reasons for leaving </label>
+              <input type="text" name="reason_for_leaving" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+         
+        <div class="col-1">
+          <div class="form-group" style="padding-top: 27px;">
+            <a href="javascript:;" class="btn btn-success" onclick='deleteemprow(${i})'>-</a>
+          </div>
+        </div>
+      </div>`;
+
+       $("#addempl").append(markupI);
+       i++
+     })
+
+     function deleteemprow(h){
+      //  let id = $('#add-rw').val()
+       console.log(h)
+       $(`#rowe${h}`).remove()
+     }
+ </script>
+
+ <script>
+  let form = document.querySelector('#regForm');
+  form.addEventListener('submit', async(e)=> {
+    e.preventDefault();
+    $('#cover-spin').show(0)
+    let pyl = {
+    applicant_town_of_birt : form.applicant_town_of_birt.value,
+    applicant_local_govt : form.applicant_local_govt.value,
+    applicant_country : form.applicant_country.value,
+    passport_no : form.passport_no.value,
+    place_state_of_issue : form.place_state_of_issue.value,
+    gender : form.gender.value,
+    marital_status : form.marital_status.value,
+    number_of_dependent_children : form.number_of_dependent_children.value,
+    nationality_race_ethnicity_of_applicant : form.nationality_race_ethnicity_of_applicant.value,
+    applicant_reliegion : form.applicant_reliegion.value,
+    physical_fitness : form.physical_fitness.value,
+    details_of_countries_visited : form.details_of_countries_visited.value,
+    language : form.language.value,
+    proccess_id: form.proccess_id.value, 
+    state_of_origin: form.state_of_origin.value
+  }
+     
+     try {
+         const res = await fetch('/application_1_1', {
+             method: "POST",
+             body: JSON.stringify(pyl),
+             headers: {'Content-Type': 'application/json'}
+         });
+
+         const data = await res.json();
+         $('#cover-spin').hide(0)
+         if (data.err) {
+          $('#cover-spin').hide(0)
+             Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: data.err,
+             })
+
+
+         } else {
+          $('#cover-spin').hide(0)
+          let p = data.data
+           Swal.fire({
+             position: 'top-end',
+             icon: 'success',
+             title: 'Successfull',
+             showConfirmButton: false,
+             timer: 1500
+           }).then(() => {
+             location.assign(`/subject_taken_and_grade?piid=`+p)
+           })
+           
+         }
+     } catch (error) {
+      $('#cover-spin').hide(0)
+       Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: error.message ,
+               // footer: '<a href="">Why do I have this issue?</a>'
+             })
+     }
+  })
+ </script>
+
+<script>
+  /*
+* select category to get subcategory
+*/
+  function getCountry() {
+      $('#cover-spin').show(0)
+    var country_id = $("#country").val();
+
+    $.ajax({
+      url: "/client/api/getstate?id=" + country_id,
+      method: "GET",
+      success: function (response) {
+          $('#cover-spin').hide(0)
+        getStates(response)
+        console.log(response)
+      }
+    })
+  }
+
+  function getStates(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT STATE </option>';
+      for (var a = 0; a < result.length; a++) {
+        //price = result[a].prices;
+        html += '<option value="' + result[a].state_id + '">' + result[a].state + '</option>';
+      }
+      $('#state').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value></option>';
+      $('#state').html(html);
+    }
+  }
+  function getState() {
+    let stateID = $("#state").val();
+    console.log('this a state id' + stateID);
+    $.ajax({
+      url: "/client/api/getlga/" + stateID,
+      method: "GET",
+      success: function (response) {
+        getLgarecords(response)
+        console.log(getLgarecords)
+      }
+    })
+  }
+
+  function getLgarecords(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT LGA</option>';
+      for (var a = 0; a < result.length; a++) {
+        html += '<option value="' + result[a].lga_id + ' ">' + result[a].lga + '</option>';
+      }
+      $('#lga_id').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value></option>';
+      $('#lga_id').html(html);
+    }
+  }
+
+  function getLGA() {
+    let lgaID = $("#lga_id").val();
+    console.log('this a lga id' + lgaID);
+    $.ajax({
+      url: "/api/getcity/" + lgaID,
+      method: "GET",
+      success: function (response) {
+        getCityrecords(response)
+        console.log(getCityrecords)
+      }
+    })
+  }
+
+  function getCityrecords(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT LGA</option>';
+      for (var a = 0; a < result.length; a++) {
+        html += '<option value="' + result[a].city_id + ' ">' + result[a].city + '</option>';
+      }
+      $('#city_id').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value> No city found </option>';
+      $('#city_id').html(html);
+    }
+  }
+</script>
+
+</body>
+
+</html>

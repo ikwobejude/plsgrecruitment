@@ -1,0 +1,119 @@
+<%- include('../layouts/header') %>
+<%- include('../layouts/appl') %>
+
+<main class="main-content  mt-0">
+    <div id="cover-spin"></div>
+  <section>
+    <div class="page-header min-vh-75">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+            <div class="card card-plain mt-5">
+              <div class="card-header pb-0 text-left bg-transparent">
+                <h3 class="font-weight-bolder text-info text-gradient">RETURNING APPLICANT</h3>
+                <%- messages('messages', locals) %> 
+                 
+              </div>
+              <div class="card-body">
+                <form role="form">
+                  <label>FORM NUMBER/EMAIL/PHONE NUMBER</label>
+                  <div class="mb-3">
+                    <input type="text" class="form-control" name="applicant_ids" placeholder="" aria-label="applicant_ids" aria-describedby="applicant_ids-addon">
+                  </div>
+                  <label>MDA</label>
+                  <div class="mb-3">
+                    <select name="mda_code" id="" class="form-control">
+                      <option value="">SELECT MDA</option>
+                      <% organizations.forEach((org) => {%>
+                        <option value="<%= org.code %>"><%= org.name %></option>
+                      <%})%>
+                    </select>
+                    <!-- <input type="password" class="form-control" name="password" placeholder="Password" aria-label="Password" aria-describedby="password-addon"> -->
+                  </div>
+                  
+                  <div class="text-center">
+                    <button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0">Search</button>
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                <p class="mb-4 text-sm mx-auto">
+                  <a href="/" class="text-info text-gradient font-weight-bold">BACK TO  HOME</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
+              <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('../assets/img/curved-images/white-curved.jpg')"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
+
+<%- include('../layouts/footer') %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script src="/notify.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  let form = document.querySelector('form')
+  form.addEventListener('submit', async(e) => {
+      e.preventDefault();
+      $('#cover-spin').show(0)
+
+      let inputs = {
+        applicant_ids: form.applicant_ids.value,
+        mda_code: form.mda_code.value,
+      }
+      console.log(inputs)
+      try {
+          let res = await fetch('/returning_applicants', {
+              method: "POST",
+              body: JSON.stringify(inputs),
+              headers: {'Content-Type': 'application/json'}
+          })
+
+          const data = await res.json(); 
+          if(data.err) {
+            $('#cover-spin').hide(0)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.err,
+                // footer: '<a href="">Why do I have this issue?</a>'
+              })
+          } else {
+            $('#cover-spin').hide(0)
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: data.msq,
+              showConfirmButton: false,
+              timer: 1500
+            }).then(() => {
+              console.log(data)
+             
+                location.assign(`${data.uri}${data.processid}`)
+             
+            })
+             
+          }
+      } catch (error) {
+        $('#cover-spin').hide(0)
+        Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                // footer: '<a href="">Why do I have this issue?</a>'
+              })
+      }
+  })
+</script>
+</body>
+
+</html>

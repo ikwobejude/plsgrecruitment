@@ -1,0 +1,139 @@
+<%- include('../layouts/header') %>
+<%- include('../layouts/nav') %>
+
+ <!-- End Navbar -->
+ <main class="main-content  mt-0">
+    <section class="min-vh-100 mb-8">
+      <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('../assets/img/curved-images/curved14.jpg');">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-5 text-center mx-auto">
+              <h1 class="text-white mb-2 mt-5">Welcome!</h1>
+              <p class="text-lead text-white">Use these awesome forms to login or create new account in your project for free.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row mt-lg-n10 mt-md-n11 mt-n10">
+          <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
+            <div class="card z-index-0">
+              <div class="card-header text-center pt-4">
+                <h5>Register with</h5>
+              </div>
+              <div class="row px-xl-5 px-sm-4 px-3">
+               
+              </div>
+              <div class="card-body">
+                <form role="form text-left">
+                  <div class="mb-3">
+                    <input type="text" class="form-control" name="name" placeholder="Full Name" aria-label="Name" aria-describedby="email-addon">
+                  </div>
+                  <div class="mb-3">
+                    <input type="text" class="form-control" name="phone" placeholder="Phone Number" aria-label="text" aria-describedby="email-addon">
+                  </div>
+                  <div class="mb-3">
+                    <input type="email" class="form-control" name="email" placeholder="Email" aria-label="Email" aria-describedby="phone-addon">
+                  </div>
+                  <div class="mb-3">
+                    <input type="password" class="form-control" name="password" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                  </div>
+                  <div class="form-check form-check-info text-left">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                    <label class="form-check-label" for="flexCheckDefault">
+                      I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
+                    </label>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                  </div>
+                  <p class="text-sm mt-3 mb-0">Already have an account? <a href="javascript:;" class="text-dark font-weight-bolder">Sign in</a></p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<%- include('../layouts/footer') %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script src="/notify.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<script>
+  let form = document.querySelector('form')
+  // const formerror = document.querySelector('.error');
+  form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // formerror.textContent = '';
+
+
+      // const username = form.assessment_item_name.value;
+
+      const name = form.name.value;
+      const email = form.email.value;
+      const phone = form.phone.value;
+      const password = form.password.value;
+
+      console.log(name,
+email,
+phone,
+password)
+      try {
+          const res = await fetch('/signup', {
+              method: "POST",
+              body: JSON.stringify({name:name, email:email, phone:phone, password:password}),
+              headers: {'Content-Type': 'application/json'}
+          });
+
+          const data = await res.json();
+
+          if (data.err) {
+              // formerror.textContent = data.err;
+             
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.err,
+                // footer: '<a href="">Why do I have this issue?</a>'
+              })
+
+
+          } else {
+              
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Your work has been saved',
+              showConfirmButton: false,
+              timer: 1500
+            }).then(() => {
+              location.assign(`/login`)
+            })
+             
+                  
+
+              
+
+          }
+      } catch (error) {
+        Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message ,
+                // footer: '<a href="">Why do I have this issue?</a>'
+              })
+          
+      }
+  })
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Plateau State Recruitment Portal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/home/vendors/owl-carousel/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/home/vendors/owl-carousel/css/owl.theme.default.css">
+    <link rel="stylesheet" href="/home/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/home/vendors/aos/css/aos.css">
+    <link rel="stylesheet" href="/home/css/style.min.css">
+</head>
+<body id="body" data-spy="scroll" data-target=".navbar" data-offset="100">
+<header id="header-section">
+    <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
+        <div class="container">
+            <div class="navbar-brand-wrapper d-flex w-100">
+                <img src="/home/images/logo.png" alt="">
+            </div>
+            <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+              <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
+                <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
+                  <div class="navbar-collapse-logo">
+                    <img src="/home/images/logo.png" alt="">
+                  </div>
+                  <button class="navbar-toggler close-button" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="mdi mdi-close navbar-toggler-icon pl-5"></span>
+                  </button>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#header-section">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#features-section">How</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/login">login</a>
+                </li>
+                <!--<li class="nav-item btn-contact-us pl-4 pl-lg-0">
+                  <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal">Contact Us</button>
+                </li>-->
+              </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="banner">
+        <div class="container">
+            <div class="page--header">
+                <div class="right--image">
+                    <h1 class="font-weight-semibold text-white text-left">Plateau State Recruitment Portal</h1>
+                    <%- messages('messages', locals) %>
+                    <h5 class="text-white text-left mt-4">Open Recruitments</h5>
+                    <div class="jobs--grid">
+                      <% organiz. forEach(function(org){%>
+                        <a href="#" data-toggle="modal" data-target="#exampleModalCenter<%= org.code %>" class="stretch-card d-block" data-aos="zoom-in">
+                            <div class="card color-cards">
+                                <div class="card-body p-0">
+                                    <div class="bg-success text-center card-contents">
+                                        <div class="card-image">
+                                            <img src="/home/images/10130.jpg" class="case-studies-card-img" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="card-details p-4 text-center">
+                                        <h6 class="m-0 font-weight-bold"><%= org.name %></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                                   <!-- Modal -->
+                            <div class="modal fade" id="exampleModalCenter<%= org.code %>" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLongTitle" style="text-align: center;">PERSONAL INFO</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <form id="form" method="get" action="/Application_info">
+                                  <div class="modal-body">
+        
+                                    <div class="form-group">
+                                      <!--<label for="Name">Name</label>-->
+                                      <input type="text" class="form-control" name="name" id="name" placeholder="Full Name" maxlength="50" required>
+                                      <input type="hidden" name="org" value="<%= org.code %>" >
+                                    </div>
+                                    <div class="form-group">
+                                      <!--<label for="Email">Email</label>-->
+                                      <input type="email" class="form-control" name="email" id="Email-1" placeholder="Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <!--<label for="Email">Phone</label>-->
+                                      <input type="text" class="form-control"name="phone"  id="Email-1" placeholder="Phone Number" required>
+                                    </div>
+                                    <div class="form-group">
+                                      <!--<label for="Message">Brief summary</label>-->
+                                      <textarea class="form-control" id="Message" name="sumarry" placeholder="Enter summary" required></textarea>
+                                    </div>
+        
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Proceed</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                      <%})%>
+                      
+                      
+                        
+                    </div>
+                 <div class="jobs--grid" style="margin-top: 15px;">
+                     <a href="/returning_applicants" class="stretch-card d-block" data-aos-delay="600" data-aos="zoom-in">
+                        <div class="card color-cards">
+                            <div class="card-body p-0">
+                                <div class="bg-primary text-center card-contents">
+                                    <div class="card-image">
+                                        <img src="/home/images/Group2.png" class="case-studies-card-img" alt="">
+                                    </div>
+                                </div>
+                                <div class="card-details text-center p-4">
+                                    <h6 class="m-0 pb-1 font-weight-bold">Returning Applicant</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="javascript:;" data-toggle="modal" data-target="#editmda" class="stretch-card d-block" data-aos-delay="600" data-aos="zoom-in">
+                      <div class="card color-cards">
+                          <div class="card-body p-0">
+                              <div class="bg-primary text-center card-contents">
+                                  <div class="card-image">
+                                      <img src="/home/images/Group126.svg" class="case-studies-card-img" alt="">
+                                  </div>
+                              </div>
+                              <div class="card-details text-center p-4">
+                                  <h6 class="m-0 pb-1 font-weight-bold">Corrections</h6>
+                              </div>
+                          </div>
+                      </div>
+                  </a>
+                 </div>
+                 <div class="jobs--grid" style="margin-top: 15px;">
+                  <a href="/help" class="stretch-card d-block" data-aos-delay="600" data-aos="zoom-in">
+                    <div class="card color-cards">
+                        <div class="card-body p-0">
+                            <div class="bg-primary text-center card-contents">
+                                <div class="card-image">
+                                    <!-- <img src="/home/images/Group126.svg" class="case-studies-card-img" alt=""> -->
+                                </div>
+                            </div>
+                            <div class="card-details text-center p-4">
+                                <h6 class="m-0 pb-1 font-weight-bold">Help? Click me</h6>
+                            </div>
+                        </div>
+                    </div>
+                  </a>
+                </div>
+                </div>
+                <div class="left-jobs">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <!--            <h6 class="section-subtitle text-muted">Lorem ipsum dolor sit amet, tincidunt vestibulum.</h6>-->
+                            <img src="/home/images/Group171.svg" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+            <!--<div>
+              <button class="btn btn-opacity-light mr-1">Get started</button>
+              <button class="btn btn-opacity-success ml-1">Learn more</button>
+            </div>-->
+        </div>
+    </div>
+    
+</header>
+
+<!-- Modal -->
+<div class="modal fade" id="popupbriefintruction" tabindex="-1" role="dialog" aria-labelledby="popupbriefintruction" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">NOTICE NOTICE NOTICE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="jumbotron">
+          <h3 class="display-6">NOTE:</h3>
+          <p class="lead">RETURNING APPLICANT</p>
+          <p class="lead">Returning applicant, should always use the return applicant box, type in either your phone number/email address or your application ID to return to your form or print completion slip. <br>
+           <i>click the button below to proceed as a returning applicant</i> </p>
+          <!-- <hr class="my-4"> -->
+          <!-- <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
+          <!-- <p class="lead"> -->
+            <a class="btn btn-primary btn-lg" href="/returning_applicants" role="button">click me </a>
+          <!-- </p> -->
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- mda correction modal -->
+<div class="modal fade" id="editmda" tabindex="-1" role="dialog" aria-labelledby="editmda" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">BASIC CORRECTIONS </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/update_mda" method="get">
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">FORM NUMBER/EMAIL/PHONE NUMBER</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" name="user_id" aria-describedby="emailHelp" placeholder="">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <!--<div class="form-group">-->
+            <!--  <label for="exampleInputPassword1"> UPDATE TO MDAs/Ministries </label>-->
+            <!-- <select name="mda_id" id="" class="form-control">-->
+            <!--  <option value="">SELECT OPTIONS </option>-->
+            <!--  <% organiz.forEach((org) => {%>-->
+            <!--    <option value="<%= org.code %>"><%= org.name %></option>-->
+            <!--  <%})%>-->
+            <!-- </select>-->
+            <!--</div>-->
+            <!-- <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div> -->
+            <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<script src="/home/vendors/jquery/jquery.min.js"></script>
+<script src="/home/vendors/bootstrap/bootstrap.min.js"></script>
+<script src="/home/vendors/owl-carousel/js/owl.carousel.min.js"></script>
+<script src="/home/vendors/aos/js/aos.js"></script>
+<script src="/home/js/landingpage.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  function taxrin(len) {
+    len = len || 100;
+    var nuc = "0123456789";
+    var i = 0;
+    var n = 0;
+    s = "";
+    while (i <= len - 1) {
+        n = Math.floor(Math.random() * 4);
+        s += nuc[n];
+        i++;
+    }
+    return s;
+}
+
+  (()=> {
+    let md = document.getElementById('popupbriefintruction');
+    var x = getCookie('ppkcookie');
+      if (x) {
+        
+      } else {
+        setCookie('ppkcookie',taxrin(20),7);
+        $('#popupbriefintruction').modal('show'); 
+      }
+    
+  })()
+
+
+  function setCookie(name,value,days) {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days*24*60*60*1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") ;
+  }
+  function getCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1,c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+  }
+  function eraseCookie(name) {   
+      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+
+
+
+</script>
+<footer>
+    <div class="d-flex justify-content-center">
+        <p class="text-center text-white pt-4">Copyright © 2022</p>
+    </div>
+</footer>
+
+
+</body>
+</html>

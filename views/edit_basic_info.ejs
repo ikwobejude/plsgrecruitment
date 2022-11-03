@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    font-family: Raleway;
+    padding: 30px;
+    width: 70%;
+    min-width: 300px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+  }
+
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  button {
+    background-color: #04AA6D;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  #prevBtn {
+    background-color: #bbbbbb;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #04AA6D;
+  }
+
+   /* spinner */
+   #cover-spin {
+        position:fixed;
+        width:100%;
+        left:0;right:0;top:0;bottom:0;
+        background-color: rgba(255,255,255,0.7);
+        z-index:9999;
+        display:none;
+    }
+    @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #cover-spin::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 48%;
+      top: 40%;
+      width: 40px;
+      height: 40px;
+      border-style: solid;
+      border-color: black;
+      border-top-color: transparent;
+      border-width: 4px;
+      border-radius: 50%;
+      -webkit-animation: spin .8s linear infinite;
+      animation: spin .8s linear infinite;
+    }
+</style>
+
+<body>
+  <div id="cover-spin"></div>
+  <form id="regForm" action="/application" method="post">
+    <h1>EDIT BASIC INFO</h1>
+    <!-- One "tab" for each step in the form: -->
+    
+      <h2 style="text-align: center; text-decoration: underline;">MINISTRY/MDA & STATE/LGA CORRECTION</h2>
+      <h3><%= application? application.applicant_fullname : '' %></h3>
+    
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Ministry <span style="color: red;">*</span></label>
+            <select name="org_id" class="form-control" id="" required >
+              <option value="">SELECT </option>
+              <% organiz.forEach(function(org){%>
+                <option value="<%= org.code %>" <%= application? application.org_id == org.code?'selected' : ''  : '' %>><%= org.name %></option>
+              <%});%>
+            </select>
+          </div>
+        </div>
+        
+      </div>
+<hr>
+      <div class="row">
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="applicant_country" id="country" class="form-control" onchange="getCountry()">
+              <option value="">SELECT COUNTRY</option>
+              <% countries.forEach((country) => { %>
+                <option value="<%= country.country_id %>" <%= country.country_id == 1 ? 'selected' : '' %>><%= country.country %></option>
+                <%})%>
+            </select>
+            <!-- <input type="text" name="applicant_country" value="<%= application? application.applicant_country : '' %>"  class="form-control" placeholder="Country" required> -->
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="state_of_origin" class="form-control bd" id="state" onchange="getState()" required>
+              <option disabled selected value>SELECT STATE </option>
+              <% if(application.state_of_origin) { %>
+                <% states.forEach((state) => { %>
+                  <option value="<%= state.state_id %>" <%= state.state_id == application.state_of_origin ? 'selected' : '' %> ><%= state.state %></option>
+                <%})%>
+              <%} else {%>
+               <% states.forEach((state) => { %>
+                  <option value="<%= state.state_id %>" <%= state.state_id == 32 ? 'selected': '' %>><%= state.state %></option>
+                <%})%>
+              <%}%>
+            </select>
+            <!-- <input type="text" name="state_of_origin" value="<%= application? application.state_of_origin : '' %>"  class="form-control" placeholder="State Of Oring" required> -->
+          </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="applicant_local_govt" class="form-control bd" id="lga_id" onchange="getLGA()" required>
+              <option disabled selected value>SELECT LGA </option>
+              <% if(application.applicant_local_govt) { %>
+                <% lgas.forEach((lga) => { %>
+                  <option value="<%= lga.lga_id %>" <%= lga.lga_id == application.applicant_local_govt ? 'selected' : '' %> ><%= lga.lga %></option>
+                <%})%>
+              <%} else {%>
+                <% lgas.forEach((lga) => { %>
+                  <% if(lga.state_id == 32){ %>
+                  <option value="<%= lga.lga_id %>" <%= lga.lga_id == application.applicant_local_govt ? 'selected' : '' %> ><%= lga.lga %></option>
+                  <%}%>
+                <%})%>
+              <%}%>
+            </select>
+            <!-- <input type="text" name="applicant_local_govt" value="<%= application? application.applicant_local_govt : '' %>"  class="form-control" placeholder="local govt" required> -->
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input type="text" name="applicant_town_of_birt" class="form-control" value="<%= application? application.applicant_town_of_birt : '' %>" placeholder="Town or village">
+            <input type="hidden" name="proccess_id" value="<%= application.process_number %>" required>
+          </div>
+        </div>
+      </div>
+     
+
+     
+
+   
+
+    </div>
+    <div style="overflow:auto;">
+      <div style="float:right;">
+        <!-- <button type="button" id="prevBtn" >Previous</button> -->
+        <button type="submit" id="nextBtn">Save changes</button>
+      </div>
+    </div>
+    <a href="/"><i class="fa fa-arrow-back"></i>Home</a>
+  </form>
+
+ 
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script src="/notify.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+ <script>
+  let piid = '<%= application.process_number %>';
+ 
+  let form = document.querySelector('#regForm');
+  form.addEventListener('submit', async(e)=> {
+    e.preventDefault();
+    $('#cover-spin').show(0)
+   
+  let pyl = {
+    org_id : form.org_id.value,
+    country : form.country.value,
+    state : form.state.value,
+    lga_id : form.lga_id.value,
+    applicant_town_of_birt: form.applicant_town_of_birt.value,
+    proccess_id : form.proccess_id.value
+  }
+     console.log(pyl)
+     try {
+         const res = await fetch('/update_mda', {
+             method: "POST",
+             body: JSON.stringify(pyl),
+             headers: {'Content-Type': 'application/json'}
+         });
+
+         const data = await res.json();
+         console.log(data)
+
+         if (data.err) {
+          $('#cover-spin').hide(0)
+             Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: data.err,
+             })
+
+
+         } else {
+          $('#cover-spin').hide(0)
+             let p = data.data
+             let org_id = data.org_id
+           Swal.fire({
+             position: 'top-end',
+             icon: 'success',
+             title: 'Successfull',
+             showConfirmButton: false,
+             timer: 1500
+           })
+           .then(() => {
+             location.reload()
+           })
+           
+         }
+     } catch (error) {
+      $('#cover-spin').hide(0)
+       Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: error.message ,
+               // footer: '<a href="">Why do I have this issue?</a>'
+             })
+     }
+  })
+ </script>
+
+<script>
+  /*
+* select category to get subcategory
+*/
+  function getCountry() {
+      $('#cover-spin').show(0)
+    var country_id = $("#country").val();
+
+    $.ajax({
+      url: "/client/api/getstate?id=" + country_id,
+      method: "GET",
+      success: function (response) {
+          $('#cover-spin').hide(0)
+        getStates(response)
+        console.log(response)
+      }
+    })
+  }
+
+  function getStates(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT STATE </option>';
+      for (var a = 0; a < result.length; a++) {
+        //price = result[a].prices;
+        html += '<option value="' + result[a].state_id + '">' + result[a].state + '</option>';
+      }
+      $('#state').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value></option>';
+      $('#state').html(html);
+    }
+  }
+  function getState() {
+    let stateID = $("#state").val();
+    console.log('this a state id' + stateID);
+    $.ajax({
+      url: "/client/api/getlga/" + stateID,
+      method: "GET",
+      success: function (response) {
+        getLgarecords(response)
+        console.log(getLgarecords)
+      }
+    })
+  }
+
+  function getLgarecords(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT LGA</option>';
+      for (var a = 0; a < result.length; a++) {
+        html += '<option value="' + result[a].lga_id + ' ">' + result[a].lga + '</option>';
+      }
+      $('#lga_id').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value></option>';
+      $('#lga_id').html(html);
+    }
+  }
+
+  function getLGA() {
+    let lgaID = $("#lga_id").val();
+    console.log('this a lga id' + lgaID);
+    $.ajax({
+      url: "/api/getcity/" + lgaID,
+      method: "GET",
+      success: function (response) {
+        getCityrecords(response)
+        console.log(getCityrecords)
+      }
+    })
+  }
+
+  function getCityrecords(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT LGA</option>';
+      for (var a = 0; a < result.length; a++) {
+        html += '<option value="' + result[a].city_id + ' ">' + result[a].city + '</option>';
+      }
+      $('#city_id').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value> No city found </option>';
+      $('#city_id').html(html);
+    }
+  }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../../layouts/admin/header') %>
+    </head>
+    <body>
+           <%- include('../../layouts/admin/side-bar') %>
+
+            <!-- Page Sidebar Ends-->
+            <div class="page-body">
+                <div class="container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <h3>Generate Invoice</h3>
+                        <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Generate Invoice</li>
+                        </ol>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Bookmark Start-->
+                        <div class="bookmark">
+                        <ul>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Tables"><i data-feather="inbox"></i></a></li>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Chat"><i data-feather="message-square"></i></a></li>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Icons"><i data-feather="command"></i></a></li>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Learning"><i data-feather="layers"></i></a></li>
+                            <li><a href="javascript:void(0)"><i class="bookmark-search" data-feather="star"></i></a>
+                            <form class="form-inline search-form">
+                                <div class="form-group form-control-search">
+                                <input type="text" placeholder="Search..">
+                                </div>
+                            </form>
+                            </li>
+                        </ul>
+                        </div>
+                        <!-- Bookmark Ends-->
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <!-- Container-fluid starts-->
+                
+
+                <%- messages('messages', locals) %>
+                <div class="container-fluid">
+                <div class="row">
+                    
+                    <div id="error"></div>
+                    <div class="col-sm-6">
+                        <div class="card" style="border-radius: 5px; padding: 3px; box-shadow: inset 5px 5px 12px #ffff,5px 5px 12px rgba(0, 0, 0, .16);">
+                            <div class="card-body">
+                                <div class="card-header"> 
+                                  <h4 class="title">ENTER TAX PAYER TIN</h4>
+                                </div>
+                                <form  method="post" action="/generate/assessment/invoice" id="form1" >
+                                    <div class="box-body">
+                                            <div class="mb-3 m-form__group">
+                                            <label for="name">Owner's TIN <span class="required">*</span></label>
+                                              <input type="text" class="form-control" id="tin" name="tin"  >
+                                            
+                                            </div>
+                                            
+                                        <div class="modal-footer footer"  id="footer">
+                                            <button type="submit" class="btn btn-primary pull-right">Next </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                          </div>
+                    </div>
+                </div>
+                </div>
+                <!-- Container-fluid Ends-->
+            </div>
+
+
+        <%- include('../../layouts/admin/footer') %>
+       
+    </body>
+
+</html>

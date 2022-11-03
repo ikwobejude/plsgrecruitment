@@ -1,0 +1,113 @@
+<%- include('../layouts/header') %>
+<%- include('../layouts/nav') %>
+
+
+  <!-- navbar-->
+ 
+  <!-- Hero Slider -->
+  <section class="hero bg-cover bg-position py-4" style="background: url(/a/img/home2.jpg)">
+    <div class="container py-5 index-forward text-white">
+      <h3>Search For Bill ref</h3>
+      <!-- Breadcrumb-->
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-none mb-0 p-0">
+          <li class="breadcrumb-item pl-0"><a href="index.html"> <i class="fas fa-home mr-2"></i>Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Make Payment</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <section class="bg-light">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-5 px-lg-0">
+          <div class="bg-primary pr-lg-3">
+            <!-- <img class="img-fluid w-100" src="img/feature-img.jpg" alt=""> -->
+          </div>
+        </div>
+        <div class="col-lg-7 px-lg-0">
+          <div class="p-4 p-md-5 shadow bg-white">
+            <header>
+                <%- messages('messages', locals) %>
+              <h2>Make <span class="text-primary">Payment </span></h2>
+
+            </header>
+            <div class="row">
+              <div class="col-lg-12">
+                <form action="">
+
+                  <h4>Payment Invoice Number (BIN)</h4>
+                  <div class="form-group ">
+                    <div class="input-group ">
+                      <input type="text" class="form-control" placeholder="ENTER BIN" name="invoice">
+                      <div class="input-group-append">
+                        <button class="btn btn-danger" style="padding: 10px ; width: 100px;" type="submit">SEND</button>
+                      </div>
+                    </div>
+                  </div>
+                  <span>Don’t have a BIN? <a href="/generate_invoice" > Click here </a></span>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+ <%if(invoice){%> 
+  <section class=" bg-light">
+    <div class="container py-5">
+      <div class="row align-items-center">
+
+        <div class="col-lg-12 px-lg-0">
+          <div class="p-4 p-md-5 shadow bg-white">
+            <header>
+              <h2>Make <span class="text-primary">Payment </span></h2>
+
+            </header>
+            <div class="row">
+              <div class="col-lg-12">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      
+                      <th>INVOICE NUMBER</th>
+                      <th>TIN</th>
+                      <th>NAME</th>
+                      <th>AMOUNT</th>
+                      <th>STATUS</th>
+                      <th>TAXMONTH</th>
+                      <th>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      
+                      <td><%= invoice.invoice_number %></td>
+                      <td><%= invoice.tax_payer_rin %></td>
+                      <td><%= invoice.tax_payer_name %></td>
+                      <td><%= invoice.assessment_amount %></td>
+                      <td><%= invoice.settlement_status==1? "Paid": "Unpaid" %></td>
+                      <td><%= invoice.tax_month}}</td>
+                      <td><a href="monify_initialization/<%= invoice.invoice_number%>"  class="btn btn-primary">Pay now</a></td>
+                    </tr>
+                  </tbody>
+
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ <%} else {%>
+
+ <%}%>
+
+ 
+<%- include('../layouts/footer') %>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../layouts/admin/header') %>
+    </head>
+      <%- include('../layouts/admin/help') %>
+
+        <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+          <!-- Navbar -->
+          <%- include('../layouts/admin/nav_check_out') %>
+            <!-- End Navbar -->
+            <div class="container-fluid">
+
+              <div class="col-12 mt-4">
+                <div class="card mb-4">
+                  <div class="card-header pb-0 p-3">
+                    <h6 class="mb-1">STEPS TO UPDATE YOUR INFORMATION</h6>
+                    <p class="text-sm"></p>
+                  </div>
+                  <div class="card-body p-3">
+                    <div class="row">
+                      <div class="col-xl-12 col-md-12 mb-xl-0 mb-4">
+                        <div class="card card-blog card-plain">
+                          <h6 class="mb-1">STEP 1</h6>
+                          <h6 class="text-gradient text-dark mb-2 text-sm">Click ON CORRECTIONS MENU</h6>
+                          <div class="position-relative">
+                            <a class="d-block shadow-xl border-radius-xl">
+                              <img src="/help/step1.PNG" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                            </a>
+                          </div>
+                          
+                        </div>
+                        <br><br><br><br>
+                        <div class="card card-blog card-plain">
+                          <h6 class="mb-1">STEP 2</h6>
+                          <h6 class="text-gradient text-dark mb-2 text-sm">TYPE IN YOUR APPLICATION ID OR PHONE NUMBER OR EMAIL ADDRESS</h6>
+                          <div class="position-relative">
+                            <a class="d-block shadow-xl border-radius-xl">
+                              <img src="/help/step2.PNG" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                            </a>
+                          </div>
+                          
+                        </div>
+                        <br><br><br><br>
+                        <div class="card card-blog card-plain">
+                          <h6 class="mb-1">STEP 3</h6>
+                          <h6 class="text-gradient text-dark mb-2 text-sm">ON THE DISPLAYED PAGE, SELECT YOUR PREFERED MDA AND IF YOU ARE SEEING WRONG STATE AND/OR LGA, MAKE NECESSARY CORRECTIONS AND CLICK SAVE CHANGES</h6>
+                          <div class="position-relative">
+                            <a class="d-block shadow-xl border-radius-xl">
+                              <img src="/help/step3.PNG" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                            </a>
+                          </div>
+                          
+                        </div>
+                      </div>
+                      
+                      
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+                       
+            </div>
+
+
+
+              
+
+                <%- include('../layouts/admin/footer') %>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+                <script src="/notify.js"></script>
+                <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                  <script>
+                    let frm = document.querySelector("form");
+                    frm.addEventListener("submit", async (e) => {
+                      e.preventDefault();
+                      
+                      $('#cover-spin').show(0)
+                      
+                        let payload = {
+                        name:frm.name.value,  
+                        email:frm.email.value,  
+                        phone: frm.phone.value, 
+                        amount:frm.amount.value,
+                        tin:frm.tin.value,
+                        piid: frm.piid.value
+                      }
+                        
+                      try {
+                        let res = await fetch('/Application_feee', {
+                          method: "POST",
+                          body: JSON.stringify(payload),
+                          headers: { 'Content-type': 'application/json' }
+                        })
+
+                        let data = await res.json();
+                        $('#cover-spin').hide(0)
+                        if (data.err) {
+                            $('#cover-spin').hide(0)
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.err,
+                          })
+                        } else {
+                            $('#cover-spin').hide(0)
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Successfull',
+                            showConfirmButton: false,
+                            timer: 1500
+                          }).then(() => {
+                            location.assign('/api_interface_web_payment?payment_id='+data.invoice)
+                            // localtion.asign(`/${data.retdata}`)
+                          })
+                        }
+
+                      } catch (error) {
+                          $('#cover-spin').hide(0)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.err,
+                          })
+                      }
+
+                    })
+                  </script>
+                  </body>
+
+</html>

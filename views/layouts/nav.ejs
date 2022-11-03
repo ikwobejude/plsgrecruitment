@@ -1,0 +1,36 @@
+<header class="header">
+ 
+  <nav class="navbar navbar-expand-lg navbar-light py-3 bg-white shadow-sm">
+    <div class="container"><a class="navbar-brand" href="/"><img src="/home/images/logo.png" alt="" height="60" width="60"></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item mx-2 <%= link == '/' ? 'active' : '' %>"><a class="nav-link text-uppercase" href="/">Home </a></li>
+          <!-- <li class="nav-item mx-2 <%= link == '/make_payment' ? 'active' : '' %>"><a class="nav-link text-uppercase" href="/make_payment">Make Payment</a></li>
+          <li class="nav-item mx-2 <%= link == '/generate_invoice' ? 'active' : '' %>"><a class="nav-link text-uppercase" href="/generate_invoice">Generate Invoice</a></li>
+          <li class="nav-item mx-2 <%= link == '/validate_receipt' ? 'active' : ''%> "><a class="nav-link text-uppercase" href="/validate_receipt">Validate Receipt</a></li> -->
+          <!-- <li class="nav-item mx-2 <%= link == '/signup' ? 'active' : ''%>"><a class="nav-link text-uppercase" href="/signup">Create Account/Tin</a></li> -->
+          
+          <% if (user == null || ""){%>
+              <li class="nav-item ml-lg-3 pl-lg-3"><a class="btn btn-outline-primary btn-sm" href="/login">Login</a></li>
+          <% } else {%>
+              <li class="nav-item ml-2 dropdown">
+                  <a class="nav-link text-uppercase dropdown-toggle pr-0" id="navbarDropdownMenuLink" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><strong> My Account</strong></a>
+                  <div class="dropdown-menu mt-lg-4" aria-labelledby="navbarDropdownMenuLink">
+                    <!-- <a class="dropdown-item font-weight-bold text-small" href=" <%= user.group_id == '190' ? '/self_assessment' : '/home'%>"> <i class="fa fa-home"></i> Dashboard</a> -->
+                    <!-- <a class="dropdown-item font-weight-bold text-small" href="#">Reset Password</a>
+                    <a class="dropdown-item font-weight-bold text-small" href="#">Transaction History</a> -->
+                    <a class="dropdown-item font-weight-bold text-small" href="/logout"> Logout </a>
+    
+                      
+                    </a>
+                  </div>
+                </li>
+          <% } %>
+
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

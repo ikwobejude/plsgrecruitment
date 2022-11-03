@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://kit.fontawesome.com/ba561ffedb.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+* {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    font-family: Raleway;
+    padding: 40px;
+    width: 70%;
+    min-width: 300px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+  }
+
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  button {
+    background-color: #04AA6D;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  #prevBtn {
+    background-color: #bbbbbb;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #04AA6D;
+  }
+   /* spinner */
+   #cover-spin {
+        position:fixed;
+        width:100%;
+        left:0;right:0;top:0;bottom:0;
+        background-color: rgba(255,255,255,0.7);
+        z-index:9999;
+        display:none;
+    }
+    @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #cover-spin::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 48%;
+      top: 40%;
+      width: 40px;
+      height: 40px;
+      border-style: solid;
+      border-color: black;
+      border-top-color: transparent;
+      border-width: 4px;
+      border-radius: 50%;
+      -webkit-animation: spin .8s linear infinite;
+      animation: spin .8s linear infinite;
+    }
+
+
+    /* .row {
+    position: relative;
+    transform: translateY(150px);
+    opacity: 0;
+    transition: all 2s ease;
+  }
+  .row.active{
+    transform: translateY(0);
+    opacity: 1;
+  } */
+
+.img {
+  align-items: center;
+}
+
+.card-container{
+/* background-color:#0F6; */
+    width:100%;
+    height:auto;
+    text-align:center;
+    margin:auto 0;  
+}
+   
+.card-container ul{
+    text-align:center;
+    margin:auto 0;
+}
+.card-container li{
+    list-style-type:none;
+    padding:.5em .5em .5em .5em;
+    float:left;
+    text-align:left;
+}
+.card{
+    transition: 0.2s;
+    overflow:hidden;
+    width:7em;
+    word-wrap:break-word;
+}
+.card-image{
+    box-shadow:1 1 #000;
+    transition:.3s;
+    /* background-color:#C33; */
+    margin:auto 0;
+    text-align:center;
+}
+.card-image:hover{
+    transform:scale(1.25,1.25);
+    transform-origin: 50% 50%;
+    box-shadow:2 2 #0f0;
+}
+.card-theme{
+    padding: .1em .1em .1em .1em;
+    /* background-color:#999; */
+    word-wrap: break-word;
+}
+.card:hover{
+box-shadow: 0 5px 5px 0 rgba(0,0,33,1);
+}
+</style>
+
+<body>
+
+  <form id="regForm" action="/review_application" method="post">
+    <input type="hidden" name="piid" id="piid" value="<%= process_id %>">
+    <h1>PREVIEW APPLICATION FORM</h1>
+    <!-- One "tab" for each step in the form: -->
+  
+      <h2>Personal Bio-data</h2>
+      <%- messages('messages', locals) %>
+ 
+        <div class="row">
+          <div class="col-xl-6 col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">(a) Full current name <span style="color: red ;">*</span></label>
+              <input type="text" name="applicant_fullname" value="<%= application? application.applicant_fullname : name %>" class="form-control" id="formGroupExampleInput" required placeholder="">
+            </div>
+          </div>
+          <div class="col-xl-6 col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Names by which otherwise known. If different from (a) </label>
+              <input type="text" name="other_names" class="form-control" value="<%= application? application.other_names : '' %>" id="formGroupExampleInput" placeholder="">
+              
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6 col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Email<span style="color: red ;">*</span></label>
+              <input type="text" name="email" value="<%= application? application.email : '' %>" class="form-control" id="formGroupExampleInput" required placeholder="">
+            </div>
+          </div>
+          <div class="col-xl-6 col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Phone Number <span style="color: red ;">*</span></label>
+              <input type="text" name="phone" class="form-control" value="<%= application? application.phone : '' %>" id="formGroupExampleInput" required placeholder="">
+             
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Post(s) or which applying in order of preference (First)<span style="color: red ;">*</span></label>
+              <select name="job_category1" class="form-control" id="" required>
+                <option value="">SELECT </option>
+                <% job_cate.forEach(function(cat){%>
+                  <option value="<%= cat.code %>" <%= application? application.job_position == cat.code?'selected' : ''  : '' %>><%= cat.name %></option>
+                <%});%>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput"> (Second) </label>
+              <select name="job_category2" class="form-control" id="">
+                <option value="">SELECT POST</option>
+                <% job_cate.forEach(function(cat){%>
+                  <option value="<%= cat.code %>"  application? application.job_position2 == cat.code?'selected' : ''  : '' "><%= cat.name %> </option>
+                <%});%>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+  
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Date available for employment<span style="color: red ;">*</span></label>
+              <input type="date" name="date_available_for_employment" value="<%= application? application.date_available_for_employment : '' %>" class="form-control" id="formGroupExampleInput"
+                placeholder="" required>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Highest education/ technical certificate obtained <span style="color: red ;">*</span></label>
+              <input type="text" name="highest_education" class="form-control" value="<%= application? application.highest_education : '' %>" id="formGroupExampleInput" placeholder="" required>
+            </div>
+          </div>
+        </div> 
+     
+        <p>
+          Present employer’s name, nature of employment, salary (give details of terms of present employment.
+          i.e. whether contract, temporary, pensionable or bonded, and whether employed is agreeable to release):
+        </p>
+        <!-- <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Present Employment details</label>
+              <textarea type="text" name="present_employment_detail"  class="form-control" id="formGroupExampleInput"
+                placeholder=""> <%= application? application.present_employment_detail : '' %></textarea>
+            </div>
+          </div>
+  
+        </div>
+      -->
+        <div class="row">
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Address for correspondence</label>
+              <textarea type="text" name="address_of_correspondence" class="form-control" id="formGroupExampleInput"
+                placeholder="">  <%= application? application.address_of_correspondence : '' %></textarea>
+            </div>
+          </div>
+          <div class="col-md-8 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Last place of resident outside Nigeria (to be NON Nigerians or who have
+                been outside Nigeria) </label>
+              <input type="text" name="last_place_of_residence_outside_nigeria" value="<%= application? application.last_place_of_residence_outside_nigeria : '' %>" class="form-control"
+                id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Age last birthday</label>
+              <input type="text" name="age_last_birthday" class="form-control" value="<%= application? application.age_last_birthday : '' %>" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+  
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Date of birth </label>
+              <input type="<%= application? '' : 'date' %>" name="dob" class="form-control" id="formGroupExampleInput" value="<%= application? application.dob : '' %>" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Name and race/ ethnicity of father<span style="color: red ;">*</span> </label>
+              <input type="text" name="name_race_ethnicity_of_father" class="form-control" value="<%= application? application.name_race_ethnicity_of_father : '' %>" id="formGroupExampleInput"
+                placeholder="" required>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Father’s present or last occupation<span style="color: red ;">*</span></label>
+              <input type="text" name="fathers_present_occupation" class="form-control" value="<%= application? application.fathers_present_occupation : '' %>" id="formGroupExampleInput"
+                placeholder="" required>
+            </div>
+          </div>
+  
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Father’s present address<span style="color: red ;">*</span></label>
+              <input type="text" name="fathers_present_address" class="form-control" value="<%= application? application.fathers_present_address : '' %>" id="formGroupExampleInput"
+                placeholder="" required>
+            </div>
+          </div>
+  
+        </div>
+     
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="formGroupExampleInput">Name and race/ ethnicity of mother <span style="color: red ;">*</span> </label>
+              <input type="text" name="name_race_ethnicity_of_mother" value="<%= application? application.name_race_ethnicity_of_mother : '' %>" class="form-control" id="formGroupExampleInput"
+                placeholder="" required>
+            </div>
+          </div>
+  
+        </div>
+      
+        <!--<h2>PART 1 CONTINUATION </h2>-->
+  
+        <h2>PART 1 CONTINUATION </h2>
+
+      <label for="formGroupExampleInput">Details of applicant’s place of birth <span style="color: red;">*</span> </label>
+      <div class="row">
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="applicant_country" id="country" class="form-control" onchange="getCountry()" required>
+              <option value="">SELECT COUNTRY</option>
+              <% countries.forEach((country) => { %>
+                <option value="<%= country.country_id %>" <%= country.country_id == application.applicant_country ? 'selected' : '' %>><%= country.country %></option>
+                <%})%>
+            </select>
+            <!-- <input type="text" name="applicant_country" value="<%= application? application.applicant_country : '' %>"  class="form-control" placeholder="Country" required> -->
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="state_of_origin" class="form-control bd" id="state" onchange="getState()" required>
+              <option disabled selected value>SELECT STATE </option>
+              <% if(application.state_of_origin) { %>
+                <% states.forEach((state) => { %>
+                  <option value="<%= state.state_id %>" <%= state.state_id == application.state_of_origin ? 'selected' : '' %> ><%= state.state %></option>
+                <%})%>
+              <%}%>
+
+            </select>
+            <!-- <input type="text" name="state_of_origin" value="<%= application? application.state_of_origin : '' %>"  class="form-control" placeholder="State Of Oring" required> -->
+          </div>
+        </div>
+        
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <select name="applicant_local_govt" class="form-control bd" id="lga_id" onchange="getLGA()" required>
+              <option disabled selected value>SELECT LGA </option>
+              <% if(application.applicant_local_govt) { %>
+                <% lgas.forEach((lga) => { %>
+                  <option value="<%= lga.lga_id %>" <%= lga.lga_id == application.state_of_origin ? 'selected' : '' %> ><%= lga.lga %></option>
+                <%})%>
+              <%}%>
+            </select>
+            <!-- <input type="text" name="applicant_local_govt" value="<%= application? application.applicant_local_govt : '' %>"  class="form-control" placeholder="local govt" required> -->
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <input type="text" name="applicant_town_of_birt" class="form-control" value="<%= application? application.applicant_town_of_birt : '' %>" placeholder="Town or village">
+            <input type="hidden" name="proccess_id" value="<%= process_id %>" required>
+          </div>
+        </div>
+      </div>
+      <p>passport no. place and state of issue (Non Nigerians and Nigerians to whom passports have been issued must
+        complete)</p>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput"> Passport No.</label>
+            <input type="text" name="passport_no" class="form-control" value="<%= application? application.passport_no : '' %>"  id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Place & State of issue </label>
+            <input type="text" name="place_state_of_issue" value="<%= application? application.place_state_of_issue : '' %>"  class="form-control" id="formGroupExampleInput"
+              placeholder="">
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Gender <span style="color: red;">*</span></label>
+            <select name="gender" id="gender" class="form-control" required>
+              <option value="">SELECT GENDER </option>
+              <% genders.forEach((gender) => { %>
+                  <option value="<%= gender.gender %>" <%= application.gender == gender.gender? 'selected': '' %> ><%= gender.gender %></option>
+              <%})%>
+            </select>
+            <!-- <input type="text" name="gender" class="form-control" id="formGroupExampleInput" value="<%= application? application.gender : '' %>"  placeholder="" required> -->
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Marital Status <span style="color: red;">*</span> </label>
+            <select name="marital_status" class="form-control" id="" required>
+              <option value="">SELECT OPTION</option>
+              <% maritals.forEach((marital) => { %>
+                <option value="<%= marital.marital_status %>" <%= application.marital_status == marital.marital_status? 'selected': '' %>><%= marital.marital_status %></option>
+              <%})%>
+            </select>
+            
+            <!-- <input type="text" name="marital_status" class="form-control" id="formGroupExampleInput" value="<%= application? application.marital_status : '' %>"  required> -->
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">number of dependent children</label>
+            <input type="text" name="number_of_dependent_children" class="form-control" value="<%= application? application.number_of_dependent_children : '' %>"  required>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Nationality/race/ethnicity of applicant <span style="color: red;">*</span></label>
+              <select name="nationality_race_ethnicity_of_applicant" id="nationality_race_ethnicity_of_applicant" class="form-control" required>
+                <option value="">SELECT COUNTRY</option>
+                <% countries.forEach((country) => { %>
+                  <option value="<%= country.country %>" <%= application.nationality_race_ethnicity_of_applicant == country.country? 'selected' : '' %>><%= country.country %></option>
+                  <%})%>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Religion of applicant </label>
+              <select name="applicant_reliegion" class="form-control" id="applicant_reliegion" required>
+                <option value="">SELECT OPTION</option>
+                <% religs.forEach((relig) => { %>
+                  <option value="<%= relig.religion %>" <%= application.applicant_reliegion == relig.religion? 'selected': '' %>><%= relig.religion %></option>
+                <%})%>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Physical fitness (any defects to be stated </label>
+            <input type="text" name="physical_fitness" class="form-control" value="<%= application? application.physical_fitness : '' %>"  id="physical_fitness" placeholder="">
+          </div>
+        </div>
+
+      </div>
+     
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Details of countries visited other than country of birth, giving dates of
+              visit(s) and reason</label>
+            <textarea type="text" name="details_of_countries_visited"  class="form-control" id="formGroupExampleInput"
+              placeholder=""> <%= application? application.details_of_countries_visited : '' %></textarea>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">Language understood well(English to be included, if well understood <span style="color: red;">*</span>
+            </label>
+            <input type="text" name="language" class="form-control" id="formGroupExampleInput" value="<%= application? application.language : '' %>" required>
+          </div>
+        </div>
+      </div>
+   
+      <h2>PART B</h2>
+      <span>Schools Attended</span>
+      <div id="addedurow">
+        <% let ln1=education.length;
+        let i = 0;
+        %>
+          <% if(ln1> 0){%>
+            <% education.forEach(function(edu){ 
+              i++
+              %>
+              <input type="hidden" name="eduid" value="<%= edu.id %>" />
+              <div class="row">
+                <div class="col-md-4 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">School <span style="color: red;">*</span></label>
+                    <input type="text" name="school_name" class="form-control" value="<%= edu.school_name %>"
+                      id="formGroupExampleInput" placeholder="" required>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Qualification <span style="color: red;">*</span></label>
+                    <input type="text" name="area" class="form-control" value="<%= edu.area %>" id="formGroupExampleInput"
+                      placeholder="" required>
+                  </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Month <span style="color: red;">*</span></label>
+                    <select name="month" class="form-control"id="" required>
+                      <option value="">SELECT MONTH</option>
+                      <% month.forEach((m) => {%>
+                        <option value="<%= m.month %>" <%= m.month== edu.month ? 'selected': '' %>><%= m.month %></option>
+                      <%})%>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Year <span style="color: red;">*</span></label>
+                    <!-- <input type="text" name="year" class="form-control" value="<%= edu.year %>" id="formGroupExampleInput" -->
+                      <!-- placeholder="" required> -->
+                      <select name="year" id="year" class="form-control" required>
+                        <option value="">=== Select Year ===</option>
+                        <% 
+                         var dt = new Date();
+                         let year = 1990;
+                         for(let i = 0; year < dt.getFullYear(); i++){
+                            year += 1;
+                             %>
+                            <option value="<%= year %>" <%= edu.year ==  year ? 'selected' : '' %>> <%= year %> </option>  
+                         
+                            <%}%>
+                       </select>
+                  </div>
+                </div>
+                <% if (i == 1){%>
+                <div class="col-md-1 col-sm-12">
+                  <div class="form-group" style="padding-top: 27px;">
+                    <a href="javascript:;" class="btn btn-success" id="add_academi">+</a>
+                  </div>
+                </div>
+                <%} else {%>
+                  <div class="col-md-1 col-sm-12">
+                    <div class="form-group" style="padding-top: 27px;">
+                      <a href="javascript:;" class="btn btn-danger" onclick="removeAcademic('<%= edu.id %>')" id="">-</a>
+                    </div>
+                  </div>
+                <%}%>
+                </div>
+                <%})%>
+  
+                  <%} else {%>
+  
+                    <div class="row">
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">School <span style="color: red;">*</span></label>
+                          <input type="text" name="school_name" class="form-control" value="" id="formGroupExampleInput"
+                            placeholder="" required>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">Qualification <span style="color: red;">*</span></label>
+                          <input type="text" name="area" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">Month <span style="color: red;">*</span> </label>
+                          <!-- <input type="text" name="month" class="form-control" id="formGroupExampleInput" placeholder="" required> -->
+                          <select name="month" class="form-control"id="">
+                            <option value="">SELECT MONTH</option>
+                            <% month.forEach((m) => {%>
+                              <option value="<%= m.month %>"><%= m.month %></option>
+                            <%})%>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">Year <span style="color: red;">*</span></label>
+                          <select name="year" id="year" class="form-control" required>
+                            <option value="">=== Select Year ===</option>
+                            <% 
+                             var dt = new Date();
+                             let year = 1990;
+                             for(let i = 0; year < dt.getFullYear(); i++){
+                                year += 1;
+                                 %>
+                                <option value="<%= year %>" <%= edu.year ==  year ? 'selected' : '' %>> <%= year %> </option>  
+                             
+                                <%}%>
+                           </select>
+                        </div>
+                      </div>
+                      <!--<div class="col-md-1 col-sm-12">-->
+                      <!--  <div class="form-group" style="padding-top: 27px;">-->
+                      <!--    <a href="javascript:;" class="btn btn-success" id="add_academi">+</a>-->
+                      <!--  </div>-->
+                      <!--</div>-->
+  
+                      <%}%>
+                    </div>
+  
+              </div>
+  
+      
+           </div>
+  
+              <p> Any special educational, physical, etc.. achievements or responsible position help: copies of
+                certificates
+                should be attached;( the original must be brought to any interview to which candidate is summoned)</p>
+              <span>Service (if any) with military force with dates:</span>
+  
+              <div class="row">
+                <div class="col-md-4 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Army no</label>
+                    <input type="text" name="army_no" value="<%= application ? application.army_no : ''%>"
+                      class="form-control" id="formGroupExampleInput" placeholder="">
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Highest rank reached, period held, and unit </label>
+                    <input type="text" name="rank_detail" value="<%= application ? application.rank_detail : ''%>"
+                      class="form-control" id="formGroupExampleInput" placeholder="">
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Character (where applicable entered in discharge book) </label>
+                    <input type="text" name="character_detail"
+                      value="<%= application ? application.character_detail : ''%>" class="form-control"
+                      id="formGroupExampleInput" placeholder="">
+                  </div>
+                </div>
+              </div>
+  
+              <p>Employment since education completed (excluding military service) stating names of employers, nature of
+                employment, dates, salary and reasons for leaving each post:</p>
+              <div id="addempl">
+                <% let ln11=prev_emplyemtnet.length; 
+                let j = 0;
+                %>
+                  <% if(ln11 > 0){%>
+                    <% prev_emplyemtnet.forEach(function(emp){
+                      j++
+                      %>
+                      <input type="hidden" name="prvempid" value="<%= emp.id %>" />
+                      <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group">
+                            <label for="formGroupExampleInput">Names of employers</label>
+                            <input type="text" name="name_of_prev_employee" value="<%= emp.name_of_prev_employee %>"
+                              class="form-control" id="formGroupExampleInput" placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group">
+                            <label for="formGroupExampleInput">Nature of employment </label>
+                            <input type="text" name="nature_of_prev_employment"
+                              value="<%= emp.nature_of_prev_employment %>" class="form-control" id="formGroupExampleInput"
+                              placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                          <div class="form-group">
+                            <label for="formGroupExampleInput">Salary </label>
+                            <input type="text" name="salary_of_prev_employment"
+                              value="<%= emp.salary_of_prev_employment %>" class="form-control" id="formGroupExampleInput"
+                              placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group">
+                            <label for="formGroupExampleInput">reasons for leaving </label>
+                            <input type="text" name="reason_for_leaving" class="form-control"
+                              value="<%= emp.reason_for_leaving %>" id="formGroupExampleInput" placeholder="">
+                          </div>
+                        </div>
+                        <!--<% if (j == 1){%>-->
+                        <!--<div class="col-md-1 col-sm-12">-->
+                        <!--  <div class="form-group" style="padding-top: 27px;">-->
+                        <!--    <a href="javascript:;" class="btn btn-success" id="add_empl">+</a>-->
+                        <!--  </div>-->
+                        <!--</div>-->
+                        <!--<%} else {%>-->
+                        <!--  <div class="col-md-1 col-sm-12">-->
+                        <!--    <div class="form-group" style="padding-top: 27px;">-->
+                        <!--      <a href="javascript:;" class="btn btn-danger" onclick="removePrev('<%= emp.id %>')" id="">-</a>-->
+                        <!--    </div>-->
+                        <!--  </div>-->
+                        <!--<%}%>-->
+                      </div>
+                      <%})%>
+  
+                        <%} else {%>
+                          <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                              <div class="form-group">
+                                <label for="formGroupExampleInput">Names of employers</label>
+                                <input type="text" name="name_of_prev_employee" class="form-control"
+                                  id="formGroupExampleInput" placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                              <div class="form-group">
+                                <label for="formGroupExampleInput">Nature of employment </label>
+                                <input type="text" name="nature_of_prev_employment" class="form-control"
+                                  id="formGroupExampleInput" placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                              <div class="form-group">
+                                <label for="formGroupExampleInput">Salary </label>
+                                <input type="text" name="salary_of_prev_employment" class="form-control"
+                                  id="formGroupExampleInput" placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                              <div class="form-group">
+                                <label for="formGroupExampleInput">reasons for leaving </label>
+                                <input type="text" name="reason_for_leaving" class="form-control"
+                                  id="formGroupExampleInput" placeholder="">
+                              </div>
+                            </div>
+                            <!--<div class="col-md-1 col-sm-12">-->
+                            <!--  <div class="form-group" style="padding-top: 27px;">-->
+                            <!--    <a href="javascript:;" class="btn btn-success" id="add_empl">+</a>-->
+                            <!--  </div>-->
+                            <!--</div>-->
+                          </div>
+                          <%}%>
+  
+              </div>
+     
+              <p>
+                Have you ever been fined or imprisoned by any court of law? If so, give full particulars of offence and punishment. If never so punished, state ‘’never ’’ <span style="color: red;">*</span>
+              </p>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <textarea type="text" name="fine_details"  class="form-control" id="formGroupExampleInput"
+                      placeholder="" required><%= application.fine_details %></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-7 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">If at present under consideration for other posts under Nigeria
+                      Government or quals government institutions give details: if not state ‘’NEVER’’<span style="color: red;">*</span></label>
+                    <textarea type="text" name="under_consideration" class="form-control" id="formGroupExampleInput"
+                      placeholder="" required><%= application.under_consideration %></textarea>
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">State any other relevant information to assist the board in deciding
+                      whether to offer you employment<span style="color: red;">*</span>.</label>
+                    <textarea type="text" name="relevant_information" class="form-control" id="formGroupExampleInput"
+                      placeholder="" required><%= application.relevant_information %></textarea>
+                  </div>
+                </div>
+              </div>
+              <p>Name of two responsible persons (not relatives, ministers/commissioners) who have consented <span style="color: red;">*</span></p>
+              <div id="addempl">
+                <% let count = Consents.length; %>
+                <% if(count > 0 ){%>
+                  <% Consents.forEach(function(con){%>
+                    <input type="hidden" name="concentid" value="<%= con.id %>" />
+                  <div class="row">
+                    <div class="col-md-4  col-sm-12 ">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">NAME  </label>
+                        <input type="text" name="name_consents" class="form-control" value="<%= con.name_consents %>" id="formGroupExampleInput" >
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">ADDRESS </label>
+                        <input type="text" name="adress_of_consents" class="form-control" value="<%= con.adress_of_consents %>" id="formGroupExampleInput" >
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT  </label>
+                        <input type="text" name="period" class="form-control" id="formGroupExampleInput" value="<%= con.period %>" >
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <%})%>
+                <%} else {%>
+                  <input type="hidden" name="concentid" value="0" />
+                  <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">NAME <span style="color: red;">*</span></label>
+                        <input type="text" name="name_consents" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">ADDRESS<span style="color: red;">*</span></label>
+                        <input type="text" name="adress_of_consents" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT <span style="color: red;">*</span></label>
+                        <input type="text" name="period" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                      </div>
+                    </div>
+                   
+                  </div>
+                  <input type="hidden" name="concentid" value="0" />
+                  <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">NAME<span style="color: red;">*</span> </label>
+                        <input type="text" name="name_consents" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">ADDRESS<span style="color: red;">*</span></label>
+                        <input type="text" name="adress_of_consents" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                      <div class="form-group">
+                        <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT <span style="color: red;">*</span></label>
+                        <input type="text" name="period" class="form-control" id="formGroupExampleInput" placeholder="" required>
+                      </div>
+                    </div>
+                   
+                  </div>
+                <%}%>
+               
+              </div>
+          
+              <div class="row">
+                <div class="col-md-7 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Have you any objections to reference being made to your present employer?
+                      If so why? </label>
+                    <input type="text" name="objections_to_reference" value="<%= application.objections_to_reference %>" class="form-control" id="formGroupExampleInput"
+                      placeholder="">
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-12">
+                  <div class="form-group">
+                    <label for="formGroupExampleInput">Why do you wish to leave your present employment?</label>
+                    <input type="text" name="why_wish_to_leave_your_present_employement" value="<%= application.why_wish_to_leave_your_present_employement %>" class="form-control"
+                      id="formGroupExampleInput" placeholder="">
+                  </div>
+                </div>
+          
+              </div>
+              <p>N.B. 1.- Failure to complete this form is every relevant particular may delay consideration of the application
+              </p>
+              <p>
+                N.B.2.-Under Plateau state of Nigeria public service commission order, false dealation or suppression of
+                relevant information is an offence liable on conviction to a fine not exceeding four Hundred Naira or to
+                imprisonment not exceeding one year, or both such fine and imprisonment. <br>
+               
+              </p>
+          
+     
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <h1>Uploaded documents</h1>
+            <ul class="card-container">
+              <% docs.forEach((doc) => {%>
+              <li>
+                <div class="card">
+                  <div class="card-image">
+                    <iframe src="/<%= doc.url %>" width="100%" height="100%"></iframe>
+                  </div>
+                  <div class="card-theme" style="text-align: center;">
+                    <a href="<%= doc.url %>"  target=”_blank” class="btn btn-info " ><i class="fas fa-eye"></i></a> 
+                    <a href="<%= doc.url %>" class="btn btn-danger" ><i class="fas fa-trash"></i></a>
+                  </div>
+                </div>
+              </li>
+              <%})%>
+           
+            
+           
+          </div>
+        </div>
+      <div>
+        <button type="button" id="prevBtn" onclick="prev('<%= process_id %>')" >Previous</button>
+        <button type="submit" id="nextBtn" >Next</button>
+      </div>
+      
+     
+
+     
+
+      
+
+      
+
+    </div>
+    
+   
+  </form>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/notify.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function prev(id){
+       location.assign('/upload_documents?piid='+id)
+    }
+ 
+
+  </script>
+<script type="text/javascript">
+  window.addEventListener('scroll', reveal);
+  function reveal(){
+    var reveals = document.querySelectorAll('.row')
+    var revealpoint = 150;
+
+    for(var i = 0; i < reveals.length; i++) {
+      var windowheight = window.innerHeight;
+      var revealtop = reveals[i].getBoundingClientRect().top;
+
+      if(revealtop < windowheight - revealpoint){
+        reveals[i].classList.add('active');
+      } else {
+        reveals[i].classList.remove('active');
+      }
+    }
+  }
+</script>
+<script>
+  let form = document.querySelector('form');
+  form.addEventListener('submit', async(e)=> {
+    e.preventDefault();
+    $('#cover-spin').show(0)
+   
+
+    let pyl = {
+      applicant_fullname : form.applicant_fullname.value,
+      other_names : form.other_names.value,
+      job_position : form.job_category1.value,
+      job_position2 : form.job_category2.value,
+      date_available_for_employment : form.date_available_for_employment.value,
+      highest_education : form.highest_education.value,
+      // present_employment_detail : form.present_employment_detail.value,
+      address_of_correspondence : form.address_of_correspondence.value,
+      last_place_of_residence_outside_nigeria : form.last_place_of_residence_outside_nigeria.value,
+      age_last_birthday : form.age_last_birthday.value,
+      dob : form.dob.value,
+      name_race_ethnicity_of_father : form.name_race_ethnicity_of_father.value,
+      fathers_present_occupation : form.fathers_present_occupation.value,
+      fathers_present_address : form.fathers_present_address.value,
+      name_race_ethnicity_of_mother : form.name_race_ethnicity_of_mother.value,
+      email : form.email.value,
+      phone : form.phone.value,
+      applicant_town_of_birt : form.applicant_town_of_birt.value,
+      applicant_local_govt : form.applicant_local_govt.value,
+      applicant_country : form.applicant_country.value,
+      passport_no : form.passport_no.value,
+      place_state_of_issue : form.place_state_of_issue.value,
+      gender : form.gender.value,
+      marital_status : form.marital_status.value,
+      number_of_dependent_children : form.number_of_dependent_children.value,
+      nationality_race_ethnicity_of_applicant : form.nationality_race_ethnicity_of_applicant.value,
+      applicant_reliegion : form.applicant_reliegion.value,
+      physical_fitness : form.physical_fitness.value.value,
+      details_of_countries_visited : form.details_of_countries_visited.value,
+      language : form.language.value,
+      state_of_origin: form.state_of_origin.value,
+      army_no:   form.army_no.value,
+      rank_detail:   form.rank_detail.value,
+      character_detail:   form.character_detail.value,
+      fine_details:  form.fine_details.value,
+      under_consideration:  form.under_consideration.value,
+      relevant_information:   form.relevant_information.value,
+      objections_to_reference:  form.objections_to_reference.value,
+      why_wish_to_leave_your_present_employement : form.why_wish_to_leave_your_present_employement.value,
+      piid : form.piid.value
+  }
+     console.log(pyl)
+     try {
+         const res = await fetch('/review_application', {
+             method: "POST",
+             body: JSON.stringify(pyl),
+             headers: {'Content-Type': 'application/json'}
+         });
+
+         const data = await res.json();
+         console.log(data)
+
+         if (data.err) {
+          $('#cover-spin').hide(0)
+             Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: data.err,
+             })
+
+
+         } else {
+          $('#cover-spin').hide(0)
+             let p = data.data
+           Swal.fire({
+             position: 'top-end',
+             icon: 'success',
+             title: 'Successfull',
+             showConfirmButton: false,
+             timer: 1500
+           })
+           .then(() => {
+             location.assign('/Application_feee?piid='+form.piid.value)
+           })
+           
+         }
+     } catch (error) {
+      $('#cover-spin').hide(0)
+       Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: error.message ,
+               // footer: '<a href="">Why do I have this issue?</a>'
+             })
+     }
+  })
+ </script>
+<script>
+  /*
+* select category to get subcategory
+*/
+  function getCountry() {
+    var country_id = $("#country").val();
+
+    $.ajax({
+      url: "/client/api/getstate?id=" + country_id,
+      method: "GET",
+      success: function (response) {
+        getStates(response)
+        console.log(response)
+      }
+    })
+  }
+
+  function getStates(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT STATE </option>';
+      for (var a = 0; a < result.length; a++) {
+        //price = result[a].prices;
+        html += '<option value="' + result[a].state_id + '">' + result[a].state + '</option>';
+      }
+      $('#state').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value></option>';
+      $('#state').html(html);
+    }
+  }
+  function getState() {
+    let stateID = $("#state").val();
+    console.log('this a state id' + stateID);
+    $.ajax({
+      url: "/client/api/getlga/" + stateID,
+      method: "GET",
+      success: function (response) {
+        getLgarecords(response)
+        console.log(getLgarecords)
+      }
+    })
+  }
+
+  function getLgarecords(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT LGA</option>';
+      for (var a = 0; a < result.length; a++) {
+        html += '<option value="' + result[a].lga_id + ' ">' + result[a].lga + '</option>';
+      }
+      $('#lga_id').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value></option>';
+      $('#lga_id').html(html);
+    }
+  }
+
+  function getLGA() {
+    let lgaID = $("#lga_id").val();
+    console.log('this a lga id' + lgaID);
+    $.ajax({
+      url: "/api/getcity/" + lgaID,
+      method: "GET",
+      success: function (response) {
+        getCityrecords(response)
+        console.log(getCityrecords)
+      }
+    })
+  }
+
+  function getCityrecords(result) {
+    if (result.length > 0) {
+      var html = "";
+      html += '<option disabled selected value> SELECT LGA</option>';
+      for (var a = 0; a < result.length; a++) {
+        html += '<option value="' + result[a].city_id + ' ">' + result[a].city + '</option>';
+      }
+      $('#city_id').html(html);
+    } else {
+      var html = "";
+      html += '<option disabled selected value> No city found </option>';
+      $('#city_id').html(html);
+    }
+  }
+</script>
+
+</body>
+
+</html>

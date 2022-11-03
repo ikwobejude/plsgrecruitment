@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../layouts/admin/header') %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    </head>
+      <%- include('../layouts/admin/side-bar') %>
+
+        <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+          <!-- Navbar -->
+          <%- include('../layouts/admin/nav_check_out') %>
+            <!-- End Navbar -->
+            <div class="container-fluid">
+
+
+              <div class="row my-4">
+                <div class="col-xl-8 col-md-12 col-sm-12 mt-4">
+                  <div class="card mb-4">
+                    <div class="card-header pb-0 p-6" style="text-align: center;">
+                      <h6 class="mb-1">APPLICANT CHECKPOINT</h6>
+                                          <%- messages('messages', locals) %>
+
+                      <!-- <p class="text-sm">Architects design houses</p> -->
+                    </div>
+                    <div class="card-body ">
+                      <div class="row">
+                        <div class="col-xl-12 col-md-12 mb-xl-0 mb-4">
+                            <%- messages('messages', locals) %>
+                          <div class="card card-blog card-plain">
+                            <div class="card-body px-1 pb-0">
+                              <form action="/Application_feee" method="post">
+                                <div class="mb-3">
+                                  <label for="">Full name</label>
+                                  <input type="text" class="form-control" placeholder="FULL NAME" name="name" id="name" value="<%= name %>">
+                                </div>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <div class="mb-3">
+                                      <label for="">Email Address</label>
+                                      <input type="text" class="form-control" placeholder="FULL NAME" name="email" id="email" value="<%= email %>">
+                                    </div>
+                                  </div>
+                                  <div class="col-6">
+                                    <div class="mb-3">
+                                      <label for="">Phone Number</label>
+                                      <input type="text" class="form-control" placeholder="FULL NAME" name="phone" id="phone" value="<%= phone %>">
+                                      <input type="hidden" class="form-control" placeholder="FULL NAME" name="tin" id="tin" value="<%= tin %>">
+                                      <input type="hidden" class="form-control" placeholder="FULL NAME" name="piid" value="<%= piid %>">
+                                    </div>
+                                  </div>
+                                </div>
+                               
+                                <div class="mb-3">
+                                  <label for="">Processing fee</label>
+                                  <input type="text" readonly class="form-control" value="1000" placeholder="FULL NAME" name="amount" id="amount">
+                                </div>
+                                <div>
+                                  <button type="submit" class="btn bg-gradient-dark  my-4 mb-2" style="float: right;">Proceed to payment</button>
+
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                       
+            </div>
+
+
+
+              
+
+                <%- include('../layouts/admin/footer') %>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+                <script src="/notify.js"></script>
+                <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                  <script>
+                    let frm = document.querySelector("form");
+                    frm.addEventListener("submit", async (e) => {
+                      e.preventDefault();
+                      
+                      $('#cover-spin').show(0)
+                      
+                        let payload = {
+                        name:frm.name.value,  
+                        email:frm.email.value,  
+                        phone: frm.phone.value, 
+                        amount:frm.amount.value,
+                        tin:frm.tin.value,
+                        piid: frm.piid.value
+                      }
+                        
+                      try {
+                        let res = await fetch('/Application_feee', {
+                          method: "POST",
+                          body: JSON.stringify(payload),
+                          headers: { 'Content-type': 'application/json' }
+                        })
+
+                        let data = await res.json();
+                        $('#cover-spin').hide(0)
+                        if (data.err) {
+                            $('#cover-spin').hide(0)
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.err,
+                          })
+                        } else {
+                            $('#cover-spin').hide(0)
+                            if(data.invoice == "undefined"){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: "Please try again",
+                              })
+                            } else {
+                                Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Successfull',
+                                showConfirmButton: false,
+                                timer: 1500
+                              }).then(() => {
+                                location.assign('/api_interface_web_payment?payment_id='+data.invoice)
+                                // localtion.asign(`/${data.retdata}`)
+                              })
+                            }
+                          
+                        }
+
+                      } catch (error) {
+                          $('#cover-spin').hide(0)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.err,
+                          })
+                      }
+
+                    })
+                  </script>
+                  </body>
+
+</html>

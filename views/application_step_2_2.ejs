@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    font-family: Raleway;
+    padding: 40px;
+    width: 70%;
+    min-width: 300px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+  }
+
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  button {
+    background-color: #04AA6D;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  #prevBtn {
+    background-color: #bbbbbb;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #04AA6D;
+  }
+   /* spinner */
+   #cover-spin {
+        position:fixed;
+        width:100%;
+        left:0;right:0;top:0;bottom:0;
+        background-color: rgba(255,255,255,0.7);
+        z-index:9999;
+        display:none;
+    }
+    @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #cover-spin::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 48%;
+      top: 40%;
+      width: 40px;
+      height: 40px;
+      border-style: solid;
+      border-color: black;
+      border-top-color: transparent;
+      border-width: 4px;
+      border-radius: 50%;
+      -webkit-animation: spin .8s linear infinite;
+      animation: spin .8s linear infinite;
+    }
+</style>
+
+<body>
+  <div id="cover-spin"></div>
+
+  <form id="regForm">
+    <h1>APPLICATION FORM</h1>
+    <p>
+      Have you ever been fined or imprisoned by any court of law? If so, give full particulars of offence and punishment. If never so punished, state ‘’never ’’ <span style="color: red;">*</span>
+    </p>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <textarea type="text" name="fine_details"  class="form-control" id="formGroupExampleInput"
+            placeholder="" required><%= application.fine_details %></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-7 col-sm-12">
+        <div class="form-group">
+          <label for="formGroupExampleInput">If at present under consideration for other posts under Nigeria
+            Government or quals government institutions give details: if not state ‘’NEVER’’<span style="color: red;">*</span></label>
+          <textarea type="text" name="under_consideration" class="form-control" id="formGroupExampleInput"
+            placeholder=""><%= application.under_consideration %></textarea>
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-12">
+        <div class="form-group">
+          <label for="formGroupExampleInput">State any other relevant information to assist the board in deciding
+            whether to offer you employment<span style="color: red;">*</span>.</label>
+          <textarea type="text" name="relevant_information" class="form-control" id="formGroupExampleInput"
+            placeholder=""><%= application.relevant_information %></textarea>
+        </div>
+      </div>
+    </div>
+    <p>Name of two responsible persons (not relatives, ministers/commissioners) who have consented <span style="color: red;">*</span></p>
+    <div id="addempl">
+      <% let count = Consents.length; %>
+      <% if(count > 0 ){%>
+        <% Consents.forEach(function(con){%>
+          <input type="hidden" name="concentid" value="<%= con.id %>" />
+        <div class="row">
+          <div class="col-md-4  col-sm-12 ">
+            <div class="form-group">
+              <label for="formGroupExampleInput">NAME <span style="color: red;">*</span> </label>
+              <input type="text" name="name_consents" class="form-control" value="<%= con.name_consents %>" id="formGroupExampleInput" required>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">ADDRESS <span style="color: red;">*</span></label>
+              <input type="text" name="adress_of_consents" class="form-control" value="<%= con.adress_of_consents %>" id="formGroupExampleInput" required>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT <span style="color: red;">*</span> </label>
+              <input type="text" name="period" class="form-control" id="formGroupExampleInput" value="<%= con.period %>" required>
+            </div>
+          </div>
+          
+        </div>
+        <%})%>
+      <%} else {%>
+        <input type="hidden" name="concentid" value="0" />
+        <div class="row">
+          <div class="col-md-3 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">NAME <span style="color: red;">*</span></label>
+              <input type="text" name="name_consents" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">ADDRESS<span style="color: red;">*</span></label>
+              <input type="text" name="adress_of_consents" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-5 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT <span style="color: red;">*</span></label>
+              <input type="text" name="period" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+         
+        </div>
+        <input type="hidden" name="concentid" value="0" />
+        <div class="row">
+          <div class="col-md-3 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">NAME<span style="color: red;">*</span> </label>
+              <input type="text" name="name_consents" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">ADDRESS<span style="color: red;">*</span></label>
+              <input type="text" name="adress_of_consents" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+          <div class="col-md-5 col-sm-12">
+            <div class="form-group">
+              <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT <span style="color: red;">*</span></label>
+              <input type="text" name="period" class="form-control" id="formGroupExampleInput" placeholder="">
+            </div>
+          </div>
+         
+        </div>
+      <%}%>
+     
+    </div>
+
+    <div class="row">
+      <div class="col-md-7 col-sm-12">
+        <div class="form-group">
+          <label for="formGroupExampleInput">Have you any objections to reference being made to your present employer?
+            If so why? </label>
+          <input type="text" name="objections_to_reference" value="<%= application.objections_to_reference %>" class="form-control" id="formGroupExampleInput"
+            placeholder="">
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-12">
+        <div class="form-group">
+          <label for="formGroupExampleInput">Why do you wish to leave your present employment?</label>
+          <input type="text" name="why_wish_to_leave_your_present_employement" value="<%= application.why_wish_to_leave_your_present_employement %>" class="form-control"
+            id="formGroupExampleInput" placeholder="">
+        </div>
+      </div>
+
+    </div>
+    <p>N.B. 1.- Failure to complete this form is every relevant particular may delay consideration of the application
+    </p>
+    <p>
+      N.B.2.-Under Plateau state of Nigeria public service commission order, false dealation or suppression of
+      relevant information is an offence liable on conviction to a fine not exceeding four Hundred Naira or to
+      imprisonment not exceeding one year, or both such fine and imprisonment. <br>
+     
+    </p>
+
+   
+
+   
+    <div style="overflow:auto;">
+      <div style="float:right;">
+        <!-- <button type="button" id="prevBtn">Previous</button> -->
+        <a href="/application_2_1?piid=<%= piid %>" class="btn btn-primary" id="" >Previous</a>
+        <button type="submit" id="nextBtn">Next</button> 
+      </div>
+    </div>
+  </form>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/notify.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    var i = 1;
+
+
+
+
+
+    $('#add_empl').on('click', function () {
+      console.log(i, "Jude")
+      if (i > 1) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: "Just two is required, thanks",
+        })
+      } else {
+        var markupI = `
+       <div class="row" id="rowe${i}">
+        <input type="hidden" name="concentid" value="0" />
+        <div class="col-md-3 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">NAME </label>
+            <input type="text" name="name_consents" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">ADDRESS</label>
+            <input type="text" name="adress_of_consents" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <label for="formGroupExampleInput">PERIOD DURING WHICH HE HAS KNOWN APPLICANT </label>
+            <input type="text" name="period" class="form-control" id="formGroupExampleInput" placeholder="">
+          </div>
+        </div>
+         
+        <div class="col-md-1">
+          <div class="form-group" style="padding-top: 27px;">
+            <a href="javascript:;" class="btn btn-danger" onclick='deleteemprow(${i})'>-</a>
+          </div>
+        </div>
+      </div>`;
+
+        $("#addempl").append(markupI);
+        i++
+      }
+    })
+
+
+
+
+    function deleteemprow(h) {
+      //  let id = $('#add-rw').val()
+      i--
+      console.log(h)
+      $(`#rowe${h}`).remove()
+    }
+
+    function deleterec(id){
+      fetch('/delet_concent?id='+id)
+      .then((response) => {
+        let data = response.json()
+        console.log(data)
+        if(data.err){
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.err,
+          })
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Removed',
+            showConfirmButton: false,
+            timer: 1500
+          })
+           
+        }
+        location.reload()
+        
+      })
+      .then((data) => console.log(data));
+
+    }
+  </script>
+
+  <script>
+        
+    let piid = "<%= piid %>"
+    let form = $('#regForm')
+    form.on('submit', async (e) => {
+      e.preventDefault();
+      $('#cover-spin').show(0)
+      console.log(form.serializeArray());
+
+      try {
+        const res = await fetch('/application_2_2?piid='+piid, {
+          method: "POST",
+          body: JSON.stringify(form.serializeArray()),
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await res.json();
+        $('#cover-spin').hide(0)
+        if (data.err) {
+          $('#cover-spin').hide(0)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.err,
+          })
+
+
+        } else {
+          $('#cover-spin').hide(0)
+          let p = data.data
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Successfull',
+            showConfirmButton: false,
+            timer: 1500
+          })
+           .then(() => {
+             location.assign(`/upload_documents?piid=` + p)
+           })
+
+        }
+      } catch (error) {
+        $('#cover-spin').hde(0)
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message,
+          // footer: '<a href="">Why do I have this issue?</a>'
+        })
+      }
+    })
+  </script>
+
+</body>
+
+</html>

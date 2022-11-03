@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../layouts/admin/header') %>
+           <!-- Plugins css start-->
+    </head>
+    <body>
+        <%- include('../layouts/admin/top-nav') %>
+        <% if (user.group_id == 190){%>
+          <%- include('../layouts/selfassessment/side-bar') %>
+        <% } else {%>
+          <%- include('../layouts/admin/side-bar') %>
+        <% }%>
+
+            <!-- Page Sidebar Ends-->
+            <div class="page-body">
+                <div class="container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <h3>Payment Invoices</h3>
+                        <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Payment Invoices</li>
+                        </ol>
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Bookmark Start-->
+                        <div class="bookmark">
+                        <ul>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Tables"><i data-feather="inbox"></i></a></li>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Chat"><i data-feather="message-square"></i></a></li>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Icons"><i data-feather="command"></i></a></li>
+                            <li><a href="javascript:void(0)" data-container="body" data-bs-toggle="popover" data-placement="top" title="" data-original-title="Learning"><i data-feather="layers"></i></a></li>
+                            <li><a href="javascript:void(0)"><i class="bookmark-search" data-feather="star"></i></a>
+                            <form class="form-inline search-form">
+                                <div class="form-group form-control-search">
+                                <input type="text" placeholder="Search..">
+                                </div>
+                            </form>
+                            </li>
+                        </ul>
+                        </div>
+                        <!-- Bookmark Ends-->
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <!-- Container-fluid starts-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="get" action="view_mandates1">
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="mb-3 m-form__group">
+                                          <label>Tax Payer tin:</label>
+                                          <div class="input-group">
+                                            <div class="input-group-text">
+                                              <i class="fa fa-mobile"></i>
+                                            </div>
+                                            <input class="form-control" type="text" name="tax_payer_rin" value="" maxlength="45" size="45" id="revenue_invoices_api_payms_tin">
+                                          </div>
+                                        </div>
+                                      </div>
+                    
+                                      <div class="col-md-6">
+                                        <div class="mb-3 m-form__group">
+                                          <label>Invoince Number:</label>
+                                          <div class="input-group">
+                                            <div class="input-group-text">
+                                              <i class="fa fa-mobile"></i>
+                                            </div>
+                                            <input class="form-control" type="text" name="invoice_number" value="" maxlength="45" size="45" id="invoice_number">
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="mb-3 m-form__group">
+                                          <label>Customer Name:</label>
+                                          <div class="input-group">
+                                            <div class="input-group-text">
+                                              <i class="fa fa-mobile"></i>
+                                            </div>
+                                            <input class="form-control" type="text" name="tax_payer_name" value="" maxlength="200" size="50" id="tax_payer_name">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="mb-3 m-form__group" style="padding: 30px;">
+                                            <div class="input-group">
+                                                <input name="Button_DoSearch" type="submit" value="Search" alt="Search" id="revenue_invoices_api_paymButton_DoSearch" class="btn btn-primary">
+
+                                            </div>
+
+                                        </div>
+                                      </div>
+                                   </div>
+                    
+                    
+                                    
+                        
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table display"  id="basic-10">
+                                  <thead>
+                                    <tr>
+                                      <th>Action</th>
+                                      <th>TaxPayerName</th>
+                                      <th>TaxPayerTin</th>
+                                      <th>TaxPayerTyper</th>
+                                      <th>InvoiceNumber</th>
+                                      <th>Amount</th>
+                                      <th>AmountPaid</th>
+                                      <th>AmountRemaining</th>
+                      
+                                      <th>Paid</th>
+                                      <th>PaymentTimeDate</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <% data.forEach(function(result) {%>
+                                    <tr>
+                                      <td>
+                                       
+                                        <a href="/print_mandate/<%= result.invoice_number%>" id="" data-toggle="tooltip" title="Print summary"  target="_blank"><i class="fa fa-print"></i></a>
+                                        <!-- <a href="/print_all_receipt/<%= result.invoice_number%>" id="" data-toggle="tooltip" title="Print All Receipts"   target="_blank"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a> -->
+                                        
+                                         <!--<a href="{{url('print_mandate_summary/'.$View->invoice_number)}}" id="" data-toggle="tooltip" title="Print Invoice"  target="_blank"><i class="fa fa-hand-o-right"></i></a>   -->
+                                      </td>
+                                      <td><%= result.tax_payer_name %></td>
+                                      <td><%= result.tax_payer_rin %></td>
+                                      <td><%= result.tax_payer_type %></td>
+                                      <td><%= result.invoice_number %></td>
+                                      <td><%= result.assessment_amount %></td>
+                                      <td><%= result.assessment_amount_paid %></td>
+                                      <td><%= result.assessment_amount_remaining%></td>
+                      
+                                      <td><%= result.settlement_status==1?"Paid":"UnPaid" %></td>
+                                      <td><%= result.created_at %></td>
+                      
+                                    </tr>
+                                    <% }) %>
+                                  </tbody>
+                                </table>
+                                
+                                <!-- {{ $view_mandate->appends(Illuminate\Support\Facades\Input::except('page'))->links() }} -->
+                              </div>
+                              <nav aria-label="...">
+                                <% if (pages > 0) { %>
+                                
+                                <ul class="pagination pagination-primary">
+                                    <% if (current == 1) { %>
+                                        <li class="page-item disabled"><a class="page-link" href="javascript:void(0)" tabindex="-1">First</a></li>
+                                    <% } else { %>
+                                        <li class="page-item "><a class="page-link" href="/receipts/revenue_invoices" tabindex="-1">Previous</a></li>
+                                    <% } %>
+                                    <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                                    <% if (i !== 1) { %>
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0)">...</a></li>
+                                    <% } %>
+                                    <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                                        <% if (i == current) { %>
+                                        <li class="page-item active"><a class="page-link" href="javascript:void(0)"><%= i %> <span class="sr-only">(current)</span></a></li>
+                                        <% } else { %>
+                                        <li class="page-item"><a class="page-link"  href="/receipts/revenue_invoices?page=<%= i %>"><%= i %></a></li>
+                                        <% } %>
+                                        <% if (i == Number(current) + 4 && i < pages) { %>
+                                            <li class="page-item"><a class="page-link"  href="javascript:void(0)">...</a></li>
+                                        <% } %>
+                                    <% } %>
+                                    <% if (current == pages) { %>
+                                    <li class="page-item"><a class="page-link" href="javascript:void(0)">Next</a></li>
+                                    <% } else { %>
+                                        <li class="page-item"><a class="page-link" href="/receipts/revenue_invoices?page=<%= pages %>">Last</a></li>
+                                    <% } %>
+                                </ul>
+                                <% } %>
+                              </nav>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <!-- Container-fluid Ends-->
+            </div>
+
+
+        <%- include('../layouts/admin/footer') %>
+        
+    </body>
+
+</html>

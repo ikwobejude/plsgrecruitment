@@ -1,0 +1,369 @@
+<%- include('../layouts/header') %>
+<%- include('../layouts/nav') %>
+
+ <!-- Hero Slider -->
+<section class="hero bg-cover bg-position py-4" style="background: url(/a/img/home1.jpg)">
+    <div class="container py-5 index-forward text-white">
+        <h3>Create Account/tin </h3>
+        <!-- Breadcrumb-->
+        <!-- <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-none mb-0 p-0">
+            <li class="breadcrumb-item pl-0"><a href="index.html"> <i class="fas fa-home mr-2"></i>Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Make Payment</li>
+          </ol>
+        </nav> -->
+    </div>
+</section>
+<section class="py-5 bg-light">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-5 px-lg-0">
+                <div class="bg-primary pr-lg-3"><img class="img-fluid w-100" src="/a/img/pay3.jpg" alt=""></div>
+            </div>
+            <div class="col-lg-7 px-lg-0">
+                <div class="p-4 p-md-5 shadow bg-white">
+                    <p class="h6 mb-1 text-uppercase text-primary mb-3" style="text-align: center ;">Create TaxPayer Account/Tin</p>
+                    <%- messages('messages', locals) %> 
+                    <form method="POST" action="/signup">
+                        <div class="form-row  ">
+                            <div class="form-group col-md-12">
+                                <label for="inputZip">Who are you?</label>
+                                <select name="usertype" id="usertype" class="form-control" >
+                                    <option value="">Select option</option>
+                                    <option value="Individual">Individual</option>
+                                    <option value="Corperate">Corperate</option>
+                                    <option value="Federal Agency">Federal Agency</option>
+                                    <option value="State Agency">State Agency</option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                        <div class="form-row  " >
+                            <div class="form-group col-md-12">
+                                <label for="inputEmail4">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="" placeholder="Individual/Organization/federal or state agency name">
+                            </div>
+                        </div>
+                        <div class="form-row  ">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email">
+                                
+                            </div>
+                            <div class="form-group col-md-6 ">
+                                <label for="Number">Phone Number</label>
+                                <input type="text" class="form-control" id="number" name="number" placeholder="Mobile Number" value="" oninput="return phoneN()">
+                               
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label for="inputAddress2">Address </label>
+                            <input type="text" class="form-control" id="inputAddress2" name="inputAddress2" value="" placeholder="Apartment, studio, or floor">
+                           
+                        </div> -->
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label for="inputState">State</label>
+                                <select class="form-control" id="state" name="state" onchange="getLga()">
+                                    <option>Choose...</option>
+                                    <% state.forEach(function(st) { %>
+                                    <option value="<%= st.id %>" <%= st.id == 15? "selected" : "" %> > <%= st.name %></option>
+                                    <%})%>
+                                </select>
+                               
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputZip">Local Govrt. Area</label>
+                                <select name="lga_id" id="lga_id" class="form-control">
+                                    <option value="<%= lga.id_lga %>"><%= lga.lga %></option>
+                                </select>
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6 }">
+                                <label for="inputState">Password</label>
+                                <input type="text" class="form-control" name="password1" id="password1" value="" onkeyup="return validate()">
+                               
+                            </div>
+                            <div class="form-group col-md-6 ">
+                                <label for="inputZip">Confirm Password</label>
+                                <input type="text" class="form-control" name="password2" id="password2" value="" oninput="return conform()">
+                               
+                            </div>
+                        </div>
+                        <div class="error">
+                            <ul>
+                                <li id="Upper">Atleast one uppercase</li>
+                                <li id="lower">Atleast one lowercase</li>
+                                <li id="special">Atleast one special charater</li>
+                                <li id="number1">Atleast one number</li>
+                                <li id="lenght">Atleast 6 characters long</li>
+                            </ul>
+                        </div>
+                        <div style="padding-bottom: 20px;text-align: right   ;" id="jj">
+                            <button type="submit" class="btn btn-primary" id="btn">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('../layouts/footer') %>
+<script src="/assets/js/notify/bootstrap-notify.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+  
+    function displayField() {
+
+        let userType = $('#taxpayer_type').val();
+        switch (userType) {
+            case 'Individual':
+                individualView();
+                break;
+            case "Corperate":
+                viewName();
+                break;
+            case  "Federal Agency":
+                viewName();
+                break;
+                case "State Agency" :
+                viewName();
+                break;
+            default:
+                $("#add_input_field").empty();
+                alert('Invalid selection')
+                break;
+        }
+
+
+    }
+
+    function individualView() {
+        $("#add_input_field").append(`
+        <div class="form-group col-md-12">
+            <label for="inputEmail4">Surname</label>
+            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Full name">
+        </div>
+        
+        `);
+    }
+    function viewName() {
+        $("#add_input_field").append(`
+        <div class="form-group col-md-12">
+            <label for="inputEmail4">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Organization/federal or state agency name">
+        </div>
+        
+        `);
+    }
+
+    function getLga() {
+        let lga = $('#state').val();
+        console.log(lga)
+        $.ajax({
+            url: 'get_local_gove/' + lga,
+            method: "GET",
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                let data = JSON.parse(JSON.stringify(res.data))
+                getRecords(data)
+            }
+        })
+    }
+
+    function getRecords(records) {
+        // console.log(records.length)
+
+
+        if (records.length > 0) {
+            var html = "";
+            html += '<option disabled selected value> SELECT LGA</option>';
+            for (var a = 0; a < records.length; a++) {
+                html += '<option value="' + records[a].lga_id + ' ">' + records[a].lga + '</option>';
+            }
+            $('#lga_id').html(html);
+        } else {
+            var html = "";
+            html += '<option disabled selected value></option>';
+            $('#lga_id').html(html);
+        }
+
+    }
+
+
+    function phoneN() {
+        let phone = document.getElementById('Number');
+        let nn = document.getElementById('nn');
+        if (phone.value.match(/[0-9]/)) {
+            nn.style.display = 'none';
+        } else {
+            nn.style.display = 'block';
+        }
+    }
+
+
+    function validate() {
+        let pass = document.getElementById('password1');
+        // let pass2 = document.getElementById('password2');
+        let Upper = document.getElementById('Upper');
+        let lower = document.getElementById('lower');
+        let special = document.getElementById('special');
+        let number = document.getElementById('number1');
+        let lenght = document.getElementById('lenght');
+
+        if (pass.value.match(/[1-9]/)) {
+            number.style.color = 'green';
+        } else {
+            number.style.color = 'red';
+        }
+
+        if (pass.value.match(/[A-Z]/)) {
+            Upper.style.color = 'green';
+        } else {
+            Upper.style.color = 'red';
+        }
+
+        if (pass.value.match(/[a-z]/)) {
+            lower.style.color = 'green';
+        } else {
+            lower.style.color = 'red';
+        }
+
+        if (pass.value.match(/[@#%^&*()]/)) {
+            special.style.color = 'green';
+        } else {
+            special.style.color = 'red';
+        }
+        if (pass.value.length >= 6) {
+            lenght.style.color = 'green';
+        } else {
+            lenght.style.color = 'red';
+        }
+    }
+  
+    function conform() {
+        let pass = document.getElementById('password1');
+        let pass2 = document.getElementById('password2');
+
+        if (pass.value == pass2.value) {
+            document.getElementById('Upper').style.display = 'none';
+            document.getElementById('lower').style.display = 'none';
+            document.getElementById('special').style.display = 'none';
+            document.getElementById('number1').style.display = 'none';
+            document.getElementById('lenght').style.display = 'none';
+            document.getElementById('mtc').style.display = 'none';
+
+
+            // $('jj').html('')
+
+           
+            // btn.style.visibility = 'visible';
+            
+        } else {
+            document.getElementById('Upper').style.display = 'block';
+            document.getElementById('lower').style.display = 'block';
+            document.getElementById('special').style.display = 'block';
+            document.getElementById('number1').style.display = 'block';
+            document.getElementById('lenght').style.display = 'block';
+            document.getElementById('mtc').style.display = 'block';
+            // document.getElementById('btn').style.display = 'block';
+            // btn.style.visibility = 'hidden';
+        }
+    }
+
+
+
+
+    let form = document.querySelector('form')
+    // const formerror = document.querySelector('.error');
+    form.addEventListener('submit', async(e) => {
+
+
+        console.log("meeeee")
+        e.preventDefault();
+        // formerror.textContent = '';
+
+
+        const full_name = form.name.value;
+        const email = form.email.value;
+        const number = form.number.value;
+        const usertype = form.usertype.value;
+        const state = form.state.value;
+        const lga_id = form.lga_id.value;
+        const password1 = form.password1.value;
+        const password2 = form.password2.value;
+
+        console.log(
+            full_name,
+            email,
+            number,
+            usertype,
+            state,
+            lga_id,
+            password1,
+            password2
+        )
+
+        try {
+            let res = await fetch('/signup', {
+                method: "POST",
+                body: JSON.stringify({name: full_name, email:email, number:number, state:state, lga_id:lga_id, usertype:usertype, password1:password1, password2:password2}),
+                headers: {'Content-Type': 'application/json'}
+            })
+
+            const data = await res.json(); 
+            if(data.err) {
+                let err = data.err
+                console.log(err.length)
+                var notify = $.notify('<i class="fa fa-warning"></i><strong>' +data.err.lenght+'</strong>.', {
+                            type: 'danger',
+                            allow_dismiss: true,
+                            delay: 5000,
+                            showProgressbar: true,
+                            timer: 300
+                        });
+                // alert()
+            } else {
+                // alert(data)
+                // location.assign('/admin/dashboard')
+
+                var notify = $.notify('<i class="fa fa-bell-o"></i><strong>User Created Successfully</strong>', {
+                            type: 'theme',
+                            allow_dismiss: true,
+                            delay: 2000,
+                            showProgressbar: true,
+                            timer: 1000
+                        });
+
+                Swal.fire({
+                    title: 'Congratulation\'s',
+                    text: `Your account has been set up succesfully & your tin is ${data.tin} click yes to proceed`,
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            setTimeout(function() {
+                                notify.update('message', '<i class="fa fa-bell-o"></i><strong>Redirecting</strong>....');
+                                location.assign('/login?tin_number='+data.tin)
+                            }, 1000);
+                        }
+                    })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    })
+</script>
+

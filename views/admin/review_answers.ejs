@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<%- include('../layouts/admin/header') %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<head>
+
+    <%- include('../layouts/admin/side-bar') %>
+
+        <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+            <!-- Navbar -->
+            <%- include('../layouts/admin/nav') %>
+                <!-- End Navbar -->
+               
+                <div class="container-fluid py-4" >
+                  <div style="text-align: center;">
+                    <a href="javascript:demoFromHTML()" class="button btn btn-primary" >Download pdf</a>
+
+                  </div>
+                    <div class="row mt-4">
+
+                        <div class="col-md-12 mt-4">
+                          <div class="card"  id="content">
+                            <div class="card-header pb-0 px-3">
+                              <h6 class="mb-0">Applied for <%= job.name %> @ <%= applicant.name %> || Applicant ID: <%= applicant.process_number %> </h6>
+                              <!-- <button onclick="printPDF()">print</button> -->
+                            </div>
+                            <div class="card-body pt-4 p-3">
+                              <ul class="list-group">
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <h6 class="mb-3 text-sm">Full current name: <%= applicant.applicant_fullname %></h6>
+                                    <span class="text-sm">Otherwise known Name: <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.other_names %></span></span>
+                                    <span class="text-sm">Email Address: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.email %></span></span>
+                                    <span class="text-sm">Gender: <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.gender %></span></span>
+                                    <span class="text-sm">Marital Status: <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.marital_status %></span></span>
+                                    <span class="text-sm">number of dependent children: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.number_of_dependent_children %></span></span>
+                                    <span class="text-sm">Age last birthday:  <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.age_last_birthday %></span></span>
+                                    <span class="text-sm">Date of birth: <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.dob %></span></span>
+                                    <span class="text-sm">Phone Number: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.phone %></span></span>
+                                   
+                                    
+                                  </div>
+                                  
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <span class="text-sm">Nationality/race/ethnicity of applicant: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.nationality_race_ethnicity_of_applicant %></span></span>
+                                    <span class="text-sm">Religion of applicant: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.applicant_reliegion %></span></span>
+                                    <span class="text-sm">Physical fitness (any defects to be stated: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.physical_fitness %></span></span>
+                                    <span class="text-sm">Place Of Birth: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.applicant_town_of_birt %></span></span>
+                                    <span class="text-sm">Local Governemt Area: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.lga %></span></span>
+                                    <span class="text-sm">State Of Origin: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.state %></span></span>
+                                    <span class="text-sm">Country: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.country%></span></span>
+                                   
+                                    <span class="text-sm">Name and race/ ethnicity of father: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.name_race_ethnicity_of_father %></span></span>
+                                    <span class="text-sm">Address for correspondence: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.address_of_correspondence %></span></span>
+                                  </div>
+                                  
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <span class="text-sm">Last place of resident outside Nigeria (to be NON Nigerians or who have
+                                        been outside Nigeria): <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.last_place_of_residence_outside_nigeria %></span></span>
+                                        <span class="text-sm">Language understood well(English to be included, if well understood: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.language %></span></span>
+                                  </div>
+                                  
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <h6 class="text-sm">Job Applying for</h6>
+                                    <span class="text-sm">Post(s) or which applying in order of preference (a): <span class="text-dark font-weight-bold ms-sm-2"><%= job.name %></span></span>
+                                    <span class="text-sm">Date available for employment: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.date_available_for_employment %></span></span>
+                                    <span class="text-sm">Highest education/ technical certificate obtained: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.highest_education %></span></span>
+                                    
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <h6 class="text-sm">father details</h6>
+                                    <span class="text-sm">Name and race/ ethnicity of father: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.name_race_ethnicity_of_father %></span></span>
+                                    <span class="text-sm">Father’s present or last occupation: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.fathers_present_occupation %></span></span>
+                                    <span class="text-sm">Father’s present address: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.fathers_present_address %></span></span>
+                                    <h6 class="text-sm">mother details</h6>
+                                    <span class="text-sm">Name and race/ ethnicity of mother: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.name_race_ethnicity_of_mother %></span></span>
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                      <span class="text-sm">Passport No: <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.passport_no %></span></span>
+                                      <span class="text-sm">Place & State of issue: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.place_state_of_issue %></span></span>
+                                      
+                                  </div>
+                                  
+                                  </li>
+                                  <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                    <div class="d-flex flex-column">
+                                      <h6 class="mb-3 text-sm">Details of countries visited other than country of birth, giving dates of
+                                        visit(s) and reason</h6>
+                                      <span class="text-sm"><span class="text-dark font-weight-bold ms-sm-2"><%= applicant.details_of_countries_visited %></span></span>
+                                     
+                                    </div>
+                                    
+                                  </li>
+
+                                  
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                      <h6 class="text-sm">School Attended:</h6>
+                                          <% education.forEach(function(edu){%>
+                                          <span class="text-sm">School: <span class="text-dark ms-sm-2 font-weight-bold"><%= edu.school_name %></span></span>
+                                          <span class="text-sm">Location: <span class="text-dark ms-sm-2 font-weight-bold"><%= edu.area %></span></span>
+                                          <span class="text-sm">month: <span class="text-dark ms-sm-2 font-weight-bold"><%= edu.month %></span></span>
+                                          
+                                          <span class="text-sm">year: <span class="text-dark ms-sm-2 font-weight-bold"><%= edu.year %> </span></span>
+                                          <hr>
+                                        <%})%>
+                                          </div>
+                                </li>
+                                
+                                
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                      <h6 class="text-sm">Examination Pass:</h6>
+                                          <% pass.forEach(function(ps){%>
+                                          <span class="text-sm">Examination Pass: <span class="text-dark ms-sm-2 font-weight-bold"><%= ps.Examination_pass %></span></span>
+                                          <span class="text-sm">Grade: <span class="text-dark ms-sm-2 font-weight-bold"><%= ps.grade %></span></span>
+                                          <span class="text-sm">Month: <span class="text-dark ms-sm-2 font-weight-bold"><%= ps.month %></span></span>
+                                          
+                                          <span class="text-sm">Year: <span class="text-dark ms-sm-2 font-weight-bold"><%= ps.year %> </span></span>
+                                          <span class="text-sm">category: <span class="text-dark ms-sm-2 font-weight-bold"><%= ps.category %> </span></span>
+                                          <hr>
+                                        <%})%>
+                                          </div>
+                                </li>
+
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <!-- <h6 class="mb-3 text-sm"> Any special educational, physical, etc.. achievements or responsible position help: copies of certificates
+                                      should be attached;( the original must be brought to any interview to which candidate is summoned)</h6> -->
+                                    <span class="text-sm">Army no: <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.army_no %></span></span>
+                                    <span class="text-sm">Highest rank reached, period held, and unit: <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.rank_detail %></span></span>
+                                    <span class="text-sm">Character (where applicable entered in discharge book): <span class="text-dark font-weight-bold ms-sm-2"><%= applicant.character_detail %></span></span>
+                                 
+                                  </div>
+                                  
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                      <h6 class="mb-3 text-sm">Employment since education completed (excluding military service) stating names of employers, nature of
+                                          employment, dates, salary and reasons for leaving each post:</h6>
+                                  <% prev_emplyemtnet.forEach(function(emp){%>
+                                    <span class="text-sm">Names of employers: <span class="text-dark ms-sm-2 font-weight-bold"><%= emp.name_of_prev_employee %></span></span>
+                                    <span class="text-sm">Nature of employment: <span class="text-dark ms-sm-2 font-weight-bold"><%= emp.nature_of_prev_employment %></span></span>
+                                    <span class="text-sm">Salary: <span class="text-dark ms-sm-2 font-weight-bold"><%= emp.salary_of_prev_employment %></span></span>
+                                    
+                                    <span class="text-sm">reasons for leaving: <span class="text-dark ms-sm-2 font-weight-bold"><%= emp.reason_for_leaving %></span></span>
+                                  <%})%>
+                                </li>
+
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <h6 class="mb-3 text-sm"> Have you ever been fined or imprisoned by any court of law? If so, give full particulars of offence and
+                                      punishment. If never so punished, state ‘’never ’’</h6>
+                                    <span class="text-sm"><span class="text-dark font-weight-bold ms-sm-2"><%= applicant.under_consideration %></span></span>
+                                    <span class="text-sm"> State my other relevant information to assist the board in deciding whether to offer you employment. <br> <span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.relevant_information %></span></span></h6>
+                                    <!-- <span class="text-sm"><span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.relevant_information %></span></span> -->
+                                    
+                                  </div>
+                                  
+                                </li>
+
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                      <h6 class="mb-3 text-sm">Name of two responsible persons (not relatives, ministers/commissioners) who have consented:</h6>
+                                      <% Consents.forEach(function(con){%>
+                                    <span class="text-sm">NAME: <span class="text-dark ms-sm-2 font-weight-bold"><%= con.name_consents %></span></span>
+                                    <span class="text-sm">ADDRESS: <span class="text-dark ms-sm-2 font-weight-bold"><%= con.name_consents %></span></span>
+                                    <span class="text-sm">PERIOD DURING WHICH HE HAS KNOWN APPLICANT: <span class="text-dark ms-sm-2 font-weight-bold">"<%= con.name_consents %></span></span>
+                                    
+                                  <%})%>
+                                </li>
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                  <div class="d-flex flex-column">
+                                    <h6 class="mb-3 text-sm">Have you any objections to reference being made to you present employer?
+                                      If so why?</h6>
+                                    <span class="text-sm"><span class="text-dark font-weight-bold ms-sm-2"><%= applicant.objections_to_reference %></span></span>
+                                    <h6 class="mb-3 text-sm">Why do you wish to leave your present employment?</h6>
+                                    <span class="text-sm"><span class="text-dark ms-sm-2 font-weight-bold"><%= applicant.why_wish_to_leave_your_present_employement %></span></span>
+                                 
+                                  </div>
+                                  
+                                </li>
+
+                              </ul>
+                            </div>
+                           
+                          </div>
+                          
+                           <div class="col-12 mt-4">
+                              <div class="card mb-4">
+                                <div class="card-header pb-0 p-3">
+                                  <h6 class="mb-1">UPLOADED DOCUMENTS</h6>
+                                  <!-- <p class="text-sm">Architects design houses</p> -->
+                                </div>
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <% docs.forEach((doc)=>{ %>
+                                      <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                                        <div class="card card-blog card-plain">
+                                          <div class="position-relative">
+                                            <a class="d-block shadow-xl border-radius-xl">
+                                              <iframe src="/<%= doc.url %>" width="100%" height="100%" class="img-fluid shadow border-radius-xl"></iframe>
+                                              <!-- <img src="../assets/img/home-decor-1.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl"> -->
+                                            </a>
+                                          </div>
+                                          
+                                        </div>
+                                        <%  let rawFileName = doc.url.substring(13);
+
+                                         let fileName = rawFileName.replace(/\.[^\/.]+$/, '');
+                                        %>
+                                        <div class="card-body px-1 pb-0">
+                                          <p class="text-gradient text-dark mb-2 text-sm"><%= fileName %></p>
+                                          <a href="javascript:;">
+                                            <h5>
+                                              <%= fileName %>
+                                            </h5>
+                                          </a>
+                                         
+                                          
+                                        </div>
+                                      </div>
+                                    <%});%>
+                                    
+                                    
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                       
+                    <%- include('../layouts/admin/footer') %>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+                    <script>
+                      let appliid = '<%= applicant.process_number %>'
+                      function demoFromHTML() {
+                          var pdf = new jsPDF('p', 'pt', 'letter');
+                          // source can be HTML-formatted string, or a reference
+                          // to an actual DOM element from which the text will be scraped.
+                          source = $('#content')[0];
+                  
+                          // we support special element handlers. Register them with jQuery-style 
+                          // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+                          // There is no support for any other type of selectors 
+                          // (class, of compound) at this time.
+                          specialElementHandlers = {
+                              // element with id of "bypass" - jQuery style selector
+                              '#bypassme': function (element, renderer) {
+                                  // true = "handled elsewhere, bypass text extraction"
+                                  return true
+                              }
+                          };
+                          margins = {
+                              top: 80,
+                              bottom: 60,
+                              left: 40,
+                              width: 522
+                          };
+                          // all coords and widths are in jsPDF instance's declared units
+                          // 'inches' in this case
+                          pdf.fromHTML(
+                              source, // HTML string or DOM elem ref.
+                              margins.left, // x coord
+                              margins.top, { // y coord
+                                  'width': margins.width, // max width of content on PDF
+                                  'elementHandlers': specialElementHandlers
+                              },
+                  
+                              function (dispose) {
+                                  // dispose: object with X, Y of the last line add to the PDF 
+                                  //          this allow the insertion of new lines after html
+                                  pdf.save(appliid+'.pdf');
+                              }, margins
+                          );
+                      }
+                  </script>
+                        </body>
+
+</html>
